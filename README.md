@@ -1,5 +1,7 @@
 # AG Grid Design System 
 
+![AG Grid Figma Design System](https://blog.ag-grid.com/content/images/size/w1000/2023/08/ag-grid-ds-blog-cover.png)
+
 Welcome to the AG Grid Figma design system. We're excited for you to begin designing with AG Grid. To start simply open the `AG-Grid-30-1-0.fig` file in Figma. 
 
 You'll find a getting started guide, documentation, and a tutorial video all within the design system file. For more information on importing files into Figma see this [Figma help article](https://help.figma.com/hc/en-us/articles/360041003114-Import-files-into-Figma).
