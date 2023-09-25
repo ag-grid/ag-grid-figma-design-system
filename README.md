@@ -32,7 +32,7 @@ If you are using the Local Variables feature in Figma, you may also want to expe
 
 # Feature Requests / Bug Reports
 
-AG Grid Enterprise customers can request support or suggest features and improvements via [Zenhub](https://ag-grid.zendesk.com/hc/en-us). Community users can file bug reports via [AG Grid Github issues](https://github.com/ag-grid/ag-grid-figma-design-system/issues).
+AG Grid Enterprise customers can request support or suggest features and improvements via [Zenhub](https://ag-grid.zendesk.com/hc/en-us). Community users can file bug reports via [AG Grid Github issues](https://github.com/ag-grid/ag-grid/issues).
 
 # Asking Questions
 
