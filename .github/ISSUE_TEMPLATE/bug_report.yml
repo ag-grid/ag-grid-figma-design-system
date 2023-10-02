@@ -1,7 +1,7 @@
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
-labels: ["bug", "triage"]
+labels: ["bug"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - octocat
@@ -9,35 +9,47 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
-    validations:
-      required: false
+        Thank you for taking the time to fill out this bug report!
   - type: textarea
     id: what-happened
     attributes:
       label: What happened?
-      description: Also tell us, what did you expect to happen?
-      placeholder: Tell us what you see!
-      value: "A bug happened!"
+      description: Please clearly explain the steps required to reproduce your bug.
+      # placeholder: Tell us what you see!
+      value: "Steps to reproduce
+      
+      Actual Result
+
+      Expected Result      
+      "
     validations:
       required: true
   - type: dropdown
-    id: version
+    id: repro
     attributes:
-      label: Version
-      description: What version of our software are you running?
+      label: Reproducible Scenario
+      description: Have you supplied a reproducible scenario (e.g. plunker, codesandbox, etc.) in the description above?
       options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
+        - Yes
+        - No (Will delay finding a solution)
       default: 0
     validations:
       required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you using?
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: What operating system are you using?
+      multiple: true
+      options:
+        - Windows
+        - MacOS
   - type: dropdown
     id: browsers
     attributes:
@@ -48,12 +60,13 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
-  - type: textarea
-    id: logs
+    id: contact
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
   - type: checkboxes
     id: terms
     attributes:
