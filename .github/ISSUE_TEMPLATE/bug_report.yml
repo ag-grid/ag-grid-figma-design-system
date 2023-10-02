@@ -16,12 +16,11 @@ body:
       label: What happened?
       description: Please clearly explain the steps required to reproduce your bug.
       # placeholder: Tell us what you see!
-      value: "Steps to reproduce
+      value: |**Steps to reproduce**
       
-      Actual Result
+      **Actual Result**
 
-      Expected Result      
-      "
+      **Expected Result**     
     validations:
       required: true
   - type: dropdown
@@ -32,7 +31,7 @@ body:
       options:
         - "Yes"
         - "No (Will delay finding a solution)"
-      default: 0
+      default: -1
     validations:
       required: true
   - type: input
@@ -60,11 +59,3 @@ body:
         - Chrome
         - Safari
         - Microsoft Edge
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
-      options:
-        - label: I agree to follow this project's Code of Conduct
-          required: true
