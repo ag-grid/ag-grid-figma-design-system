@@ -7,9 +7,9 @@ assignees:
   - octocat
 body:
   - type: textarea
-    id: what-happened
+    id: challenge
     attributes:
-      label: What happened?
+      label: Describe your challenge
       description: "Please clearly explain what you are trying to achieve - a web-based scenario (plunker, codesandbox, etc.) will make it easier to help."
       value: 
     validations:
