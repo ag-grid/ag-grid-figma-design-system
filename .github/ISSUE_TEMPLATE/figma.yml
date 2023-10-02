@@ -6,10 +6,10 @@ projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - octocat
 body:
-  - type: markdown
+- type: markdown
     attributes:
       value: |
-        Thanks for taking the time to get in touch with us!
+        Thank you for taking the time to get in touch with us!
   - type: textarea
     id: what-happened
     attributes:
