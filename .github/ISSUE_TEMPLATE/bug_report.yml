@@ -30,8 +30,8 @@ body:
       label: Reproducible Scenario
       description: Have you supplied a reproducible scenario (e.g. plunker, codesandbox, etc.) in the description above?
       options:
-        - Yes
-        - No (Will delay finding a solution)
+        - "Yes"
+        - "No (Will delay finding a solution)"
       default: 0
     validations:
       required: true
