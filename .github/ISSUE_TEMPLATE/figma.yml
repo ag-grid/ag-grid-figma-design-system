@@ -1,7 +1,7 @@
-name: Figma Issue
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug"]
+name: Figma issue
+description: Contact us regarding our Figma Design System
+title: "[Figma]: "
+labels: ["Figma"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - octocat
