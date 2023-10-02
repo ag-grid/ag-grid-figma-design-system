@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggestion!
+        Thank you for your suggestion!
   - type: textarea
     id: what-to-implement
     attributes:
