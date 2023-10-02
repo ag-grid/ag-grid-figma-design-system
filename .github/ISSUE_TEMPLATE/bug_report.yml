@@ -17,11 +17,11 @@ body:
       description: Please clearly explain the steps required to reproduce your bug.
       # placeholder: Tell us what you see!
       value: |
-      **Steps to reproduce**
+      "**Steps to reproduce**
       
       **Actual Result**
 
-      **Expected Result**     
+      **Expected Result**"   
     validations:
       required: true
   - type: dropdown
