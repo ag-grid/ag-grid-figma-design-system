@@ -16,7 +16,7 @@ body:
       label: What happened?
       description: Please clearly explain the steps required to reproduce your bug.
       # placeholder: Tell us what you see!
-      value: |"**Steps to reproduce**
+      value: "**Steps to reproduce**
       
       **Actual Result**
 
