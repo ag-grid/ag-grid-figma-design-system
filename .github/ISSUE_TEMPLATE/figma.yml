@@ -6,20 +6,47 @@ projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - octocat
 body:
-
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report!
   - type: textarea
     id: what-happened
     attributes:
       label: What happened?
-      description: Have you encountered a bug or are you requesting a feature?
-      placeholder:
-      value: "A bug happened/I would like X feature"
+      description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible web-based scenario.
+      value: |
+        "**Steps to reproduce**
+      
+        **Actual Result**
+  
+        **Expected Result**" 
     validations:
       required: true
-   - type: input
+  - type: dropdown
+    id: repro
+    attributes:
+      label: Reproducible Scenario
+      description: Have you supplied a reproducible scenario (e.g. plunker, codesandbox, etc.) in the description above?
+      options:
+        - "Yes"
+        - "No (Will delay finding a solution)"
+    validations:
+      required: true
+  - type: input
     id: version
     attributes:
       label: Version
       description: Which version of our software are you using?
     validations:
       required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Which operating system are you using?
+      multiple: true
+      options:
+        - Windows
+        - MacOS
+  - type: dropdown
+    id: browsers
