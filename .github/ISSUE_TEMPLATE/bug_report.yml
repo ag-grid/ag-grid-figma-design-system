@@ -15,8 +15,7 @@ body:
     attributes:
       label: What happened?
       description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible web-based scenario.
-      # placeholder: Tell us what you see!
-      value: | 
+      value: |
       Steps to reproduce
       
       Actual Result
