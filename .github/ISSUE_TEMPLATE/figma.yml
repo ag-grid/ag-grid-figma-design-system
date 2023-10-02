@@ -14,47 +14,15 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible web-based scenario.
-      value: |
-        "**Steps to reproduce**
-      
-        **Actual Result**
-  
-        **Expected Result**" 
+      description: Have you encountered a bug or are you requesting a feature?
+      placeholder:
+      value: "A bug happened/I would like X feature"
     validations:
       required: true
-  - type: dropdown
-    id: repro
-    attributes:
-      label: Reproducible Scenario
-      description: Have you supplied a reproducible scenario (e.g. plunker, codesandbox, etc.) in the description above?
-      options:
-        - "Yes"
-        - "No (Will delay finding a solution)"
-    validations:
-      required: true
-  - type: input
+   - type: input
     id: version
     attributes:
       label: Version
       description: Which version of our software are you using?
     validations:
       required: true
-  - type: dropdown
-    id: os
-    attributes:
-      label: Which operating system are you using?
-      multiple: true
-      options:
-        - Windows
-        - MacOS
-  - type: dropdown
-    id: browsers
-    attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
