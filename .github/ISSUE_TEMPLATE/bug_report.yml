@@ -31,7 +31,6 @@ body:
       options:
         - "Yes"
         - "No (Will delay finding a solution)"
-      default: -1
     validations:
       required: true
   - type: input
