@@ -14,9 +14,10 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Please clearly explain the steps required to reproduce your bug.
+      description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible web-based scenario.
       # placeholder: Tell us what you see!
-      value: "**Steps to reproduce**
+      value: | 
+      "**Steps to reproduce**
       
       **Actual Result**
 
@@ -37,13 +38,13 @@ body:
     id: version
     attributes:
       label: Version
-      description: What version of our software are you using?
+      description: Which version of our software are you using?
     validations:
       required: true
   - type: dropdown
     id: os
     attributes:
-      label: What operating system are you using?
+      label: Which operating system are you using?
       multiple: true
       options:
         - Windows
