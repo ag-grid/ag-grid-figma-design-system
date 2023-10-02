@@ -16,9 +16,9 @@ body:
       label: What would you like us to implement?
       description: Be detailed and provide as much information as possible!
       value: |
-        "Example web-based scenario to show your use case
+        Example web-based scenario to show your use case
         
-        Desired functionality"
+        Desired functionality
     validations:
       required: true
   - type: input
