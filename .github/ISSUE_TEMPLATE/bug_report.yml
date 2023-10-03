@@ -23,8 +23,8 @@ body:
         1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
            https://ag-grid.com/javascript-data-grid/
         2. List of steps to reproduce issue with live sample
-        3. Description of current behavior
-        4. Description of correct behavior
+        3. Description of current behaviour
+        4. Description of correct behaviour
     validations:
       required: true
   - type: dropdown
