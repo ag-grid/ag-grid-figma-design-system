@@ -13,7 +13,7 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Please clearly explain the steps required to reproduce your bug and **provide a link to a reproducible online scenario from our [documentation](https://ag-grid.com/javascript-data-grid/).**
+      description: Please **provide a link to a reproducible online scenario from our [documentation](https://ag-grid.com/javascript-data-grid/) and clearly explain the steps required to reproduce your bug.**
       value: |
         Click on the documentation hyperlink above to fork an example from one of our examples and add it here: 
         
