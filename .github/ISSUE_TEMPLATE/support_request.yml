@@ -10,13 +10,20 @@ body:
     id: what-to-achieve
     attributes:
       label: What would you like to achieve?
-      description: Please provide a link to a reproducible online scenario from our [documentation](https://ag-grid.com/javascript-data-grid/) and provide as much information as possible!
       value: |
-        Click on the documentation hyperlink above to fork one of our examples and add it here:
-
-        **Describe the current functionality**
+        **Customers of AG Grid Enterprise**
+        If you are an AG Grid Enterprise customer please submit this request in our support system instead.
         
-        **Describe your desired functionality**
+        **Requesting Community Support**
+        Issues entered here will be labelled as managed-by-community and are open for the wider AG Grid community to help/support with.
+        This means that AG Grid is not going to be actively looking into them and they will get closed if inactive for more than one month.
+        
+        Please provide all the items listed below:
+        1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
+           https://ag-grid.com/javascript-data-grid/
+        2. List of steps to reproduce issue with live sample
+        3. Description of current behaviour
+        4. Description of desired behaviour
     validations:
       required: true
   - type: dropdown
