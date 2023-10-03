@@ -7,11 +7,16 @@ assignees:
   - octocat
 body:
   - type: textarea
-    id: challenge
+    id: what-to-achieve
     attributes:
-      label: Describe your challenge
-      description: "Please clearly explain what you are trying to achieve - a web-based scenario (plunker, codesandbox, etc.) will make it easier to help."
-      value: 
+      label: What would you like to achieve?
+      description: Be detailed and provide as much information as possible!
+      value: |
+        **Add an example from our [documentation](https://ag-grid.com/javascript-data-grid/) to show your use case**
+
+        **Describe the current functionality**
+        
+        **Describe your desired functionality**
     validations:
       required: true
   - type: dropdown
