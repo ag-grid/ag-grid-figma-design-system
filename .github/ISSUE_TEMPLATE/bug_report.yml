@@ -15,7 +15,7 @@ body:
       label: What happened?
       description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible online scenario from our documentation.
       value: |
-        "**Fork and adjust your example from our [documentation](https://ag-grid.com/javascript-data-grid/)
+        "Fork and adjust your example from our [documentation](https://ag-grid.com/javascript-data-grid/)
         
         **Steps to reproduce**
       
