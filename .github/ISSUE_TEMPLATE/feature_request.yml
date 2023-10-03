@@ -1,8 +1,7 @@
 name: Request a Feature
 description: Request a Feature
 title: "[Feature]: "
-labels: ["FR-proposed"]
-projects: ["octo-org/1", "octo-org/44"]
+labels: ["triage"]
 assignees:
   - octocat
 body:
@@ -16,9 +15,21 @@ body:
       label: What would you like us to implement?
       description: Be detailed and provide as much information as possible!
       value: |
-        Example web-based scenario to show your use case
+        **Add an example from our [documentation](https://ag-grid.com/javascript-data-grid/) to show your use case**
+
+        **Describe the current functionality**
         
-        Desired functionality
+        **Describe your desired functionality**
+    validations:
+      required: true
+  - type: dropdown
+    id: repro
+    attributes:
+      label: Reproducible Scenario
+      description: Have you supplied a reproducible scenario (e.g. plunker, codesandbox, etc.) in the description above?
+      options:
+        - "Yes"
+        - "No (Will delay finding a solution)"
     validations:
       required: true
   - type: input
