@@ -1,8 +1,7 @@
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
-labels: ["bug"]
-projects: ["octo-org/1", "octo-org/44"]
+labels: ["triage"]
 assignees:
   - octocat
 body:
@@ -14,9 +13,11 @@ body:
     id: what-happened
     attributes:
       label: What happened?
-      description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible web-based scenario.
+      description: Please clearly explain the steps required to reproduce your bug and provide a link to a reproducible online scenario from our documentation.
       value: |
-        "**Steps to reproduce**
+        "**Fork and adjust your example from our [documentation](https://ag-grid.com/javascript-data-grid/)
+        
+        **Steps to reproduce**
       
         **Actual Result**
   
