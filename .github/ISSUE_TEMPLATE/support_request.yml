@@ -10,9 +10,9 @@ body:
     id: what-to-achieve
     attributes:
       label: What would you like to achieve?
-      description: Be detailed and provide as much information as possible!
+      description: Please provide a link to a reproducible online scenario from our [documentation](https://ag-grid.com/javascript-data-grid/) and provide as much information as possible!
       value: |
-        **Add an example from our [documentation](https://ag-grid.com/javascript-data-grid/) to show your use case**
+        Click on the documentation hyperlink above to fork one of our examples and add it here:
 
         **Describe the current functionality**
         
