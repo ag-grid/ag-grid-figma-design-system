@@ -1,20 +1,20 @@
 name: Figma issue
-description: Contact us regarding our Figma Design System
+description: Request features or file bug reports for the AG Grid Figma design system
 title: "[Figma]: "
 labels: ["Figma"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - octocat
+  - markdurrant
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for getting in touch with us!
+        Thank you for getting in touch with about the [AG Grid Figma design system](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/)! Please detail your feature request or bug report bellow. 
   - type: textarea
-    id: what-happened
+    id: figma-feature-bug 
     attributes:
-      label: What happened?
-      description: Have you encountered a bug or are you requesting a feature?
+      label: Tell us about your request or issue...
+      description: Have you encountered a bug or are you requesting a feature? If possible please upload screenshots or `.fig` files in the text section below
       placeholder:
       value: "A bug happened/I would like X feature"
     validations:
@@ -23,6 +23,6 @@ body:
     id: version
     attributes:
       label: Version
-      description: Which version of our software are you using?
+      description: Which version of the [AG Grid Figma design system](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/) are you using? 
     validations:
       required: true
