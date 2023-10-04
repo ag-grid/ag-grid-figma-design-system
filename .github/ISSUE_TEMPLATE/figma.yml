@@ -14,9 +14,7 @@ body:
           If you are an **AG Grid Enterprise** customer you can also request features or file bug reports via [Zendesk](https://ag-grid.zendesk.com/hc/en-us).
   - type: markdown
     attributes:
-      value: |
-          <br /><br />
-          ### Tell us about your request or issue...
+      value: "<br />" 
   - type: textarea
     id: figma-feature-bug 
     attributes:
