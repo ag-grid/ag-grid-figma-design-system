@@ -47,9 +47,7 @@ body:
       required: true
   - type: markdown
     attributes:
-      value: |
-      |
-      |
+      value: "<br /><br />"
   - type: markdown
     attributes:
       value: |
