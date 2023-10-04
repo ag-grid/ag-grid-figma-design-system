@@ -19,8 +19,8 @@ body:
           ### Tell us about your request or issue...
   - type: textarea
     id: figma-feature-bug 
-    label: Your feature request or bug report...
     attributes:
+      label: ""
       description: Have you encountered a bug or are you requesting a feature? If possible please upload screenshots or `.fig` files in the text section below
       placeholder:
       value: |
