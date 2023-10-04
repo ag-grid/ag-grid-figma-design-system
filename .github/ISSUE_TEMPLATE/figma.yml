@@ -12,6 +12,9 @@ body:
         Thank you for getting in touch with about the [AG Grid Figma design system](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/)! Please detail your feature request or bug report bellow.
         
         If you are an **AG Grid Enterprise** customer you can also request features or file bug reports via [Zendesk](https://ag-grid.zendesk.com/hc/en-us).
+  - type: markdown
+    attributes:
+      value: "<br /><br />"
   - type: textarea
     id: figma-feature-bug 
     attributes:
@@ -37,7 +40,7 @@ body:
       required: true
   - type: markdown
     attributes:
-      value: "<br /><br />"
+      value: "<br />"
   - type: input
     id: figma-version
     attributes:
@@ -47,7 +50,7 @@ body:
       required: true
   - type: markdown
     attributes:
-      value: "<br /><br />"
+      value: "<br />"
   - type: markdown
     attributes:
       value: |
