@@ -17,6 +17,7 @@ body:
       description: Have you encountered a bug or are you requesting a feature?
       placeholder:
       value: "A bug happened/I would like X feature"
+      rows: 20
     validations:
       required: true
   - type: input
