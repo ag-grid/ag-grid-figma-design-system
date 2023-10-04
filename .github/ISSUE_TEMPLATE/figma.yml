@@ -20,7 +20,7 @@ body:
   - type: textarea
     id: figma-feature-bug 
     attributes:
-      label: ""
+      label: Your feature request or bug report...
       description: Have you encountered a bug or are you requesting a feature? If possible please upload screenshots or `.fig` files in the text section below
       placeholder:
       value: |
