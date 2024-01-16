@@ -28,12 +28,14 @@ body:
           - Description of the new feature 
           - What you hope to achieve with the new feature 
           - Any links to AG Grid documentation detailing the relevant grid features
+          - How has your experience of using the AG Grid Figma design system been? What could we do to improve?
 
           *Bug reports*
           To file a bug report please provide the following information...
 
           - Description of the bug you're experiencing 
           - Clear step by step instructions to reproduce the bug 
+          - How has your experience of using the AG Grid Figma design system been? What could we do to improve?
 
           If possible please attach a screenshot(s) or `.fig` file that can help us quickly understand your feature request or bug report. 
     validations:
