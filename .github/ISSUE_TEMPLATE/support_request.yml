@@ -15,7 +15,7 @@ body:
         **Requesting Community Support**
         Issues entered here will be labelled as managed-by-community and are open for the wider AG Grid community to help/support with.
         This means that AG Grid is not going to be actively looking into them and they will get closed if inactive for more than one month.
-        "<br />"
+        <br />
   - type: textarea
     id: what-to-achieve
     attributes:
