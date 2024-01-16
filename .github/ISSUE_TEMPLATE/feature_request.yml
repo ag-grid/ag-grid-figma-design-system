@@ -2,27 +2,31 @@ name: Request a Feature
 description: Request a Feature
 title: "[Feature]: "
 labels: ["triage"]
-assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for your suggestion!
+        Thank you for getting in touch!
+          
+        **Customers of AG Grid Enterprise**
+        If you are an AG Grid Enterprise customer please submit this request in our [enterprise support system](https://ag-grid.zendesk.com/hc/en-us) instead.
+        <br />
   - type: textarea
     id: what-to-implement
     attributes:
       label: What would you like us to implement?
-      value: |     
-        **Customers of AG Grid Enterprise**
-        If you are an AG Grid Enterprise customer please submit any feature requests in our support system instead.
-        
+      value: |             
         Please provide all the items listed below:
+        
         1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
            https://ag-grid.com/javascript-data-grid/
+           
         2. List of steps to reproduce issue with live sample
+        
         3. Description of current behaviour
+        
         4. Description of desired behaviour
+        
     validations:
       required: true
   - type: dropdown
