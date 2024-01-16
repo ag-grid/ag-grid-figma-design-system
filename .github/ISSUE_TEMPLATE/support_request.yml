@@ -4,25 +4,35 @@ title: "[Support Request]: "
 labels: ["managed-by-community"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - octocat
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for getting in touch!
+          
+        **Customers of AG Grid Enterprise**
+        If you are an AG Grid Enterprise customer please submit this request in our [enterprise support system](https://ag-grid.zendesk.com/hc/en-us) instead.
+        
+        **Requesting Community Support**
+        Issues entered here will be labelled as managed-by-community and are open for the wider AG Grid community to help/support with.
+        This means that AG Grid is not going to be actively looking into them and they will get closed if inactive for more than one month.
+        "<br />"
   - type: textarea
     id: what-to-achieve
     attributes:
       label: What would you like to achieve?
       value: |
-        **Customers of AG Grid Enterprise**
-        If you are an AG Grid Enterprise customer please submit this request in our support system instead.
-        
-        **Requesting Community Support**
-        Issues entered here will be labelled as managed-by-community and are open for the wider AG Grid community to help/support with. This means that AG Grid is not going to be actively looking into them and they will get closed if inactive for more than one month.
-        
         Please provide all the items listed below:
+        
         1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
            https://ag-grid.com/javascript-data-grid/
+           
         2. List of steps to reproduce issue with live sample
+        
         3. Description of current behaviour
+        
         4. Description of desired behaviour
+        
     validations:
       required: true
   - type: dropdown
