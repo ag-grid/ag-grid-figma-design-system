@@ -18,14 +18,16 @@ body:
       value: |             
         Please provide all the items listed below:
         
-        1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
+        1. Link to a live sample with AG Grid showing the use case. You can build one by modifying any of our documentation examples:
            https://ag-grid.com/javascript-data-grid/
            
-        2. List of steps to reproduce issue with live sample
+        2. List of steps to illustrate use case with live sample
         
         3. Description of current behaviour
         
         4. Description of desired behaviour
+
+        5. Screenshot of desired UI showing the use case (optional)
         
     validations:
       required: true
