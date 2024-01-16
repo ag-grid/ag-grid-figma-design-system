@@ -2,29 +2,32 @@ name: Bug Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["triage"]
-assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to fill out this bug report!
+        Thank you for getting in touch!
+          
+        **Customers of AG Grid Enterprise**
+        If you are an AG Grid Enterprise customer please submit this request in our [enterprise support system](https://ag-grid.zendesk.com/hc/en-us) instead.
+        <br />
   - type: textarea
     id: what-happened
     attributes:
       label: What happened?
       value: |
-        We're keen to investigate potential issues you've found with AG Grid.
-        
-        **Customers of AG Grid Enterprise**
-        If you are an AG Grid Enterprise customer please submit any bug reports in our support system instead.
-        
+        We're keen to investigate potential issues you've found with AG Grid.        
         Please provide all the items listed below:
+        
         1. Link to a live sample reproducing the issue. You can build one by modifying any of our documentation examples:
            https://ag-grid.com/javascript-data-grid/
+           
         2. List of steps to reproduce issue with live sample
+        
         3. Description of current behaviour
+        
         4. Description of correct behaviour
+        
     validations:
       required: true
   - type: dropdown
