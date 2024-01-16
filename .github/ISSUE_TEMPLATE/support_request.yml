@@ -3,7 +3,6 @@ description: Request support from our awesome community!
 title: "[Support Request]: "
 labels: ["managed-by-community"]
 projects: ["octo-org/1", "octo-org/44"]
-assignees:
 body:
   - type: markdown
     attributes:
