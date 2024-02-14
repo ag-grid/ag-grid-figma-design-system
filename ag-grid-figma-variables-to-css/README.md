@@ -24,22 +24,14 @@ $ npm install
 Run `tokensToCss.js` and specifiy your tokens .json file to generate your AG Grid CSS themes.
 
 ```sh
-$ node tokensToCss.js PATH_TO_MY_TOKENS_JSON_FILE.json
+$ node tokensToCss.js PATH_TO_MY_TOKENS_JSON_FILE.tokens.json
 ```
 
 
 Your new AG Grid CSS themes will be saved to `./css/`. You should see console output similar to... 
 
 ```
-css
-✔︎ css/ag-theme-alpine-dark.css
-
-css
-✔︎ css/ag-theme-alpine.css
-
-css
-✔︎ css/ag-theme-MY-CUSTOM-THEME.css
+✔︎ ./css/new-ag-grid-themes.css saved!
 ```
-
 
 You can now apply your theme to your AG Grid app. See our [Themes documentation](https://ag-grid.com/javascript-data-grid/themes/) for more information. 
