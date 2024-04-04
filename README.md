@@ -13,6 +13,8 @@ This directory contains the following files:
 - `ag-grid-figma-variables-to-css` - A sample node.js project to convert Figma Local Variables to CSS
 - `figma-file-archive` - An archive of previous versions
 
+<br />
+
 ## Features
 
 The current version of the AG Grid Figma Design System supports:
@@ -21,18 +23,26 @@ The current version of the AG Grid Figma Design System supports:
 - All **core** Grid components, which are a mirror image of the components in the AG Grid library
 - Conversion of Figma Local Variables to CSS with the `ag-grid-figma-variables-to-css` sample project
 
+<br />
+
 ## Getting Started
 
 To start simply download the `AG-Grid-XX-XX-XX.fig` file and open it in Figma. You'll find a getting started guide, documentation, and a tutorial video all within the design system file. For more information visit our [design system documentation](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/) or check out our [YouTube Tutorials](https://www.youtube.com/playlist?list=PLsZlhayVgqNzE9G1yLLHQCRYSgDvx7Zo1).
 
 *For help importing files into Figma see this [Figma help article](https://help.figma.com/hc/en-us/articles/360041003114-Import-files-into-Figma).*
 
+<br />
+
 ## Local Variables to CSS
 
 If you are using the Local Variables feature in Figma, you may also want to experiment with creating and exporting a custom AG Grid theme using Figma variables. Once you've exported your custom AG Grid theme .json from Figma you can use the included Node.js project `ag-grid-figma-variables-to-css/` to create a custom theme to try out with AG Grid in browser.
 
+<br />
+
 ## Token Studio
 If you are a [Token Studio](https://tokens.studio/) user we have also supplied all our tokens in the `AG-Grid-XX-XX-XX-Token-Studio.json` file. 
+
+<br />
 
 ## Feature Requests / Bug Reports
 
