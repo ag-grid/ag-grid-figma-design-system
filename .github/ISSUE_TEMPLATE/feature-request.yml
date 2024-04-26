@@ -1,7 +1,7 @@
-name: Figma issue
-description: Request features or file bug reports for the AG Grid Figma design system
-title: "[Figma]: "
-labels: ["Figma"]
+name: Feature Request
+description: Request features for the AG Grid Figma design system
+title: "[Feature Request]: "
+labels: ["Feature Request"]
 projects: ["octo-org/1", "octo-org/44"]
 assignees:
   - markdurrant

@@ -1,0 +1,59 @@
+name: Bug report
+description: Request features or file bug reports for the AG Grid Figma design system
+title: "[Bug report]: "
+labels: ["Bug report"]
+projects: ["octo-org/1", "octo-org/44"]
+assignees:
+  - markdurrant
+body:
+  - type: markdown
+    attributes:
+      value: |
+          Thank you for getting in touch with about the [AG Grid Figma design system](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/)! Please detail your feature request or bug report bellow.
+          
+          If you are an **AG Grid Enterprise** customer you can also request features or file bug reports via [Zendesk](https://ag-grid.zendesk.com/hc/en-us).
+  - type: markdown
+    attributes:
+      value: "<br />" 
+  - type: textarea
+    id: figma-feature-bug 
+    attributes:
+      label: Your feature request or bug report...
+      description: Have you encountered a bug or are you requesting a feature? If possible please upload screenshots or `.fig` files in the text section below
+      placeholder:
+      value: |
+          *Feature requests*
+          If you're requesting a new feature please provide the following information...
+
+          - Description of the new feature 
+          - What you hope to achieve with the new feature 
+          - Any links to AG Grid documentation detailing the relevant grid features
+          - How has your experience of using the AG Grid Figma design system been? What could we do to improve?
+
+          *Bug reports*
+          To file a bug report please provide the following information...
+
+          - Description of the bug you're experiencing 
+          - Clear step by step instructions to reproduce the bug 
+          - How has your experience of using the AG Grid Figma design system been? What could we do to improve?
+
+          If possible please attach a screenshot(s) or `.fig` file that can help us quickly understand your feature request or bug report. 
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: "<br />"
+  - type: input
+    id: figma-version
+    attributes:
+      label: Version
+      description: Which version of the [AG Grid Figma design system](https://ag-grid.com/javascript-data-grid/ag-grid-design-system/) are you using? 
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: "<br />"
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for you feedback. 
