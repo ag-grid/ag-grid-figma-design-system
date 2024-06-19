@@ -1,6 +1,6 @@
 # AG Grid Figma Design System Tokens to CSS Theme
 
-Export design tokens from the AG Grid Figma Design System, and transform them into AG Grid CSS themes. 
+Export design tokens from the AG Grid Figma Design System, and transform them into AG Grid CSS theme extension. These custom theme extensions are designed to work with our default `Quartz` theme. 
 
 
 ## Exporting Design Tokens from Figma
@@ -34,4 +34,31 @@ Your new AG Grid CSS themes will be saved to `./css/`. You should see console ou
 ✔︎ ./css/new-ag-grid-themes.css saved!
 ```
 
-You can now apply your theme to your AG Grid app. See our [Themes documentation](https://ag-grid.com/javascript-data-grid/themes/) for more information. 
+You can now extend the default AG Grid Quartz theme with your custom extension. Shown below is a simple example of extending the Quartz theme. 
+
+```<html lang="en">
+  <head>
+    <!-- Includes all JS & CSS for the JavaScript Data Grid -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    
+    <!-- Load your custom theme extension CSS, would include the .my-custom-extension class -->
+    <link rel="stylesheet" href="my-custom-extension.css">
+  </head>
+  <body>
+    <!-- Your grid container, including  quartz and .my-custom-extension classes -->
+    <div id="myGrid" class="ag-theme-quartz my-custom-extension"></div>
+
+    <script>
+      // Grid Options: Contains all of the data grid configurations
+      const gridOptions = {};
+
+      // Your Javascript code to create the data grid
+      const myGridElement = document.querySelector('#myGrid');
+
+      agGrid.createGrid(myGridElement, gridOptions);
+    </script>
+  </body>
+</html>
+```
+
+See our [Themes documentation](https://ag-grid.com/javascript-data-grid/themes/) for more information. 

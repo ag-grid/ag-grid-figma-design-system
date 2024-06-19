@@ -35,7 +35,9 @@ To start simply download the `AG-Grid-XX-XX-XX.fig` file and open it in Figma. Y
 
 ## Local Variables to CSS
 
-If you are using the Local Variables feature in Figma, you may also want to experiment with creating and exporting a custom AG Grid theme using Figma variables. Once you've exported your custom AG Grid theme .json from Figma you can use the included Node.js project `ag-grid-figma-variables-to-css/` to create a custom theme to try out with AG Grid in browser.
+If you are using the Local Variables feature in Figma, you may also want to experiment with exporting a custom AG Grid theme extension. You can export your Figma Local Variables as a `.json` file then use the included Node.js project `ag-grid-figma-variables-to-css/` to create a custom theme extension. 
+
+Custom theme extensions can be used with our default `Quartz` theme to completely change the look of AG Grid in the browser to match your Figma designs.
 
 <br />
 
