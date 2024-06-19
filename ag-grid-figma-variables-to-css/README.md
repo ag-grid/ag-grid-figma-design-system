@@ -36,7 +36,8 @@ Your new AG Grid CSS themes will be saved to `./css/`. You should see console ou
 
 You can now extend the default AG Grid Quartz theme with your custom extension. Shown below is a simple example of extending the Quartz theme. 
 
-```<html lang="en">
+```html
+<html lang="en">
   <head>
     <!-- Includes all JS & CSS for the JavaScript Data Grid -->
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
