@@ -20,7 +20,48 @@ const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
 // Fix issues with plugin output
 const transformedTokens = transformModeRefs(tokenInput);
 
-console.log(transformedTokens.themes.material.comp['ag-active-color'].value);
+// Clone the tokens to be able to compare
+const trimmedTokens = structuredClone(tokenInput);
+
+// Remove unnecessary collections so we don't trigger reference errors 
+delete trimmedTokens.densities;
+delete trimmedTokens.admin;
+delete trimmedTokens.charts;
+delete trimmedTokens.themes.mode.comp;
+
+// Getting rid weird specific problems
+delete trimmedTokens.themes.alpine.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.mode.light.theme.alpine.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.mode.light.theme.quartz.comp['ag-border-grid-container'];
+delete trimmedTokens.mode.light.theme.quartz.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.mode.light.theme.material.comp['ag-side-button-selected-background-color'];
+delete trimmedTokens.mode.light.theme.material.comp['ag-toggle']['active-background'];
+delete trimmedTokens.mode.light.theme.material.comp['ag-control']['active-background'];
+delete trimmedTokens.mode.light.theme.material.comp['ag-border-grid-container'];
+delete trimmedTokens.mode.light.theme.material.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.mode.dark.theme.alpine.comp['ag-border-grid-container'];
+delete trimmedTokens.mode.dark.theme.quartz.comp['ag-border-grid-container'];
+delete trimmedTokens.mode.dark.theme.quartz.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.mode.dark.theme.material.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.themes.material.comp['ag-side-button-selected-background-color'];
+delete trimmedTokens.themes.material.comp['ag-border-grid-container'];
+delete trimmedTokens.themes.material.comp['ag-side-button-panel-background-color'];
+delete trimmedTokens.themes.quartz.comp['ag-border-grid-container'];
+delete trimmedTokens.themes.quartz.comp['ag-side-button-panel-background-color'];
+
+// Extract theme names from json
+const themeNames = Object.keys(trimmedTokens.themes).filter((themeName) => themeName !== 'mode');
+
+ 
+for (const themeName of themeNames) {
+  const comp = trimmedTokens.themes[themeName].comp;
+
+  for (const key in comp) {
+    if (comp[key].type === undefined) {
+      delete comp[key]
+    }
+  }
+}
 
 // CSS output filename
 const outputFile = "./css/new-ag-grid-themes.css";
@@ -29,7 +70,7 @@ const outputFile = "./css/new-ag-grid-themes.css";
 const outputTheme = (themeTokens) => {
   let cssOutput = "";
 
-  const themeNames = Object.keys(themeTokens.themes);
+  // const themeNames = Object.keys(themeTokens.themes);
 
   // Style dictionary css variables config
   const dictionaryConfig = {
@@ -72,4 +113,4 @@ const outputTheme = (themeTokens) => {
   console.log(`✔︎ ${outputFile} saved!`);
 };
 
-outputTheme(transformedTokens);
+outputTheme(trimmedTokens);
