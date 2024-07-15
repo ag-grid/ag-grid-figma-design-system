@@ -1,6 +1,8 @@
 const fs = require("fs");
 const StyleDictionary = require("style-dictionary");
 const allProps = require("./data/all-props.json");
+const transformModeRefs = require("./transformModeRefs");
+
 
 // Specify path for Figma "Variables Import Export" plugin json output
 let tokenPath = process.argv[2];
@@ -14,6 +16,11 @@ if (!tokenPath) {
 
 // Read and parse json input
 const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
+
+// Fix issues with plugin output
+const transformedTokens = transformModeRefs(tokenInput);
+
+console.log(transformedTokens.themes.material.comp['ag-active-color'].value);
 
 // CSS output filename
 const outputFile = "./css/new-ag-grid-themes.css";
@@ -65,4 +72,4 @@ const outputTheme = (themeTokens) => {
   console.log(`✔︎ ${outputFile} saved!`);
 };
 
-outputTheme(tokenInput);
+outputTheme(transformedTokens);
