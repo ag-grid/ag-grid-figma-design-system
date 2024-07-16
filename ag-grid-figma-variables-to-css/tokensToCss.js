@@ -1,7 +1,6 @@
 const fs = require("fs");
 const StyleDictionary = require("style-dictionary");
 const allProps = require("./data/all-props.json");
-const transformModeRefs = require("./transformModeRefs");
 
 
 // Specify path for Figma "Variables Import Export" plugin json output
@@ -17,9 +16,6 @@ if (!tokenPath) {
 // Read and parse json input
 const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
 
-// Fix issues with plugin output
-const transformedTokens = transformModeRefs(tokenInput);
-
 // Clone the tokens to be able to compare
 const trimmedTokens = structuredClone(tokenInput);
 
@@ -27,9 +23,11 @@ const trimmedTokens = structuredClone(tokenInput);
 delete trimmedTokens.densities;
 delete trimmedTokens.admin;
 delete trimmedTokens.charts;
-delete trimmedTokens.themes.mode.comp;
+if (trimmedTokens.themes.mode) {
+  delete trimmedTokens.themes.mode.comp;
+}
 
-// Getting rid weird specific problems
+// Get rid of weird specific problems
 delete trimmedTokens.themes.alpine.comp['ag-side-button-panel-background-color'];
 delete trimmedTokens.mode.light.theme.alpine.comp['ag-side-button-panel-background-color'];
 delete trimmedTokens.mode.light.theme.quartz.comp['ag-border-grid-container'];
