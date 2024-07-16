@@ -8,9 +8,10 @@ Export design tokens from the AG Grid Figma Design System, and transform them in
 Before you can create an AG Grid CSS theme, first you'll need to export your design tokens from Figma.
 
 1. In the Resources panel go to the Plugins tab. 
-2. Search for the [Variables Import Export plugin](https://www.figma.com/community/plugin/1254848311152928301).
-3. Click run for the [Variables Import Export plugin](https://www.figma.com/community/plugin/1254848311152928301) and select the 'Export variables' option. 
-4. Click the 'Export variables' button and save the json to the `./tokens/` directory.
+2. Search for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens).
+3. Click run for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) and select the 'Export Design Tokens File' option. 
+4. Deselect all ‘include types...’ except for "Figma Variables"
+5. Click the 'Save & Export' button and save the json to the `./tokens/` directory.
 
 
 ## Transforming Figma JSON Output to an AG Grid CSS theme 
