@@ -52,7 +52,7 @@ delete trimmedTokens.themes.quartz.comp['ag-side-button-panel-background-color']
 // Extract theme names from json
 const themeNames = Object.keys(trimmedTokens.themes).filter((themeName) => themeName !== 'mode');
 
- 
+// Remove any grouped properties 
 for (const themeName of themeNames) {
   const comp = trimmedTokens.themes[themeName].comp;
 
