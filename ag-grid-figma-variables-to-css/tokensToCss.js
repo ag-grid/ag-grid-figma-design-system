@@ -96,6 +96,9 @@ function updateTokenReferences({ tokens, mode }) {
   for (const otherMode of otherModes) {
     delete tokens.mode[otherMode];
   }
+
+  // Delete charts
+  delete tokens.charts;
 }
 
 // Transform and save an AG grid theme css file for each Figma variable collection
