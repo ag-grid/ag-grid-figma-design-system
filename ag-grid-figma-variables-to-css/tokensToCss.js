@@ -101,6 +101,21 @@ function updateTokenReferences({ tokens, mode }) {
   delete tokens.charts;
 }
 
+function getTokensCss(tokens) {
+  let cssOutput = '';
+
+  Object.keys(tokens).filter((key) =>
+    allProps.includes(key)
+  ).forEach((key) => {
+    const { type, value } = tokens[key];
+    const cssValue = type === 'dimension' ? `${value}px` : value;
+
+    cssOutput += `  --${key}: ${cssValue};\n`;
+  });
+
+  return cssOutput;
+}
+
 // Transform and save an AG grid theme css file for each Figma variable collection
 const outputTheme = (tokenContents) => {
   let cssOutput = "";
@@ -128,19 +143,22 @@ const outputTheme = (tokenContents) => {
       StyleDictionary.extend(dictionaryConfig).exportPlatform("css");
 
     themeNames.forEach((themeName) => {
-      const themeTokens = tokenExport.mode[mode].theme[themeName].comp;
-
       const selector = `.ag-theme-${themeName}-${mode} {\n`;
 
       cssOutput += selector;
 
-      Object.keys(themeTokens).forEach((key) => {
-        if (!allProps.includes(key)) return;
+      cssOutput += getTokensCss(tokenExport.themes[themeName]);
+      cssOutput += getTokensCss(tokenExport.themes[themeName].size);
+      cssOutput += getTokensCss(tokenExport.themes[themeName].space);
 
-        const value = themeTokens[key].value;
+      const themeTokens = tokenExport.mode[mode].theme[themeName].comp;
+      Object.keys(themeTokens)
+        .filter((key) => allProps.includes(key))
+        .forEach((key) => {
+          const value = themeTokens[key].value;
 
-        cssOutput += `  --${key}: ${value};\n`;
-      });
+          cssOutput += `  --${key}: ${value};\n`;
+        });
 
       cssOutput += `}\n\n`;
     });
