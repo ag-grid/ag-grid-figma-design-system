@@ -19,7 +19,7 @@ const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
 const outputFile = "./css/new-ag-grid-themes.css";
 
 function getModeThemeNames(tokens, mode) {
-  return Object.keys(tokens.mode[mode].theme).filter(
+  return Object.keys(tokens['ag-mode'][mode]).filter(
     (themeName) => themeName !== "mode"
   );
 }
@@ -53,6 +53,8 @@ function updateThemeComp({ comp, mode }) {
 }
 
 function updateModeComp({ comp, themeName }) {
+  if (!comp) return;
+
   Object.entries(comp).forEach(([, propertyObj]) => {
     const isNested = propertyObj.value === undefined;
 
@@ -80,21 +82,21 @@ function updateTokenReferences({ tokens, mode }) {
   // Update theme comp references
   // Eg, In `themes.material.comp.ag-active-color.value`
   // Convert `mode.material.theme.material.comp.ag-active-color` to `mode.light.theme.material.comp.ag-active-color`
-  Object.entries(tokens.themes).forEach(([, themeObj]) => {
-    updateThemeComp({ comp: themeObj.comp, mode });
+  Object.entries(tokens['ag-theme']).forEach(([, themeObj]) => {
+    updateThemeComp({ comp: themeObj.color, mode });
   });
 
   // Update mode theme comp references
   // Eg, In `mode.light.theme.material.comp.ag-toggle.active-background.value`
   // Convert `themes.light.comp.ag-checkbox-checked-color` -> `themes.material.comp.ag-checkbox-checked-color`
-  Object.entries(tokens.mode[mode].theme).forEach(([themeName, themeObj]) => {
-    updateModeComp({ comp: themeObj.comp, themeName });
+  Object.entries(tokens['ag-mode'][mode]).forEach(([themeName, themeObj]) => {
+    updateModeComp({ comp: themeObj.color, themeName });
   });
 
   // Delete other mode, so all references are valid
-  const otherModes = Object.keys(tokens.mode).filter((m) => m !== mode);
+  const otherModes = Object.keys(tokens['ag-mode']).filter((m) => m !== mode);
   for (const otherMode of otherModes) {
-    delete tokens.mode[otherMode];
+    delete tokens['ag-mode'][otherMode];
   }
 
   // Delete charts
