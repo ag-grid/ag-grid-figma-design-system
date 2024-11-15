@@ -7,10 +7,18 @@ let tokenPath = process.argv[2];
 
 if (!tokenPath) {
   console.error(
-    `No tokens .json file specifified.\nSpecify your tokens .json file with...\n\n$ node tokensToCss.js PATH_TO_MY_TOKENS_JSON_FILE.json`
+    `No tokens .json file specified.\nSpecify your tokens .json file with...\n\n$ node tokensToCss.js PATH_TO_MY_TOKENS_JSON_FILE.json`
   );
   process.exit();
 }
+
+// Ignore these mode keys from output CSS
+const MODE_KEY_EXCLUSIONS = [
+  "mode",
+  "charts",
+  "ag-charts-logo-light",
+  "ag-charts-logo-dark",
+];
 
 // Read and parse json input
 const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
@@ -19,8 +27,8 @@ const tokenInput = JSON.parse(fs.readFileSync(tokenPath, "utf-8"));
 const outputFile = "./css/new-ag-grid-themes.css";
 
 function getModeThemeNames(tokens, mode) {
-  return Object.keys(tokens['ag-mode'][mode]).filter(
-    (themeName) => themeName !== "mode"
+  return Object.keys(tokens["ag-mode"][mode]).filter(
+    (themeName) => !MODE_KEY_EXCLUSIONS.includes(themeName)
   );
 }
 
@@ -33,40 +41,72 @@ function getReferencePath(value) {
   return match;
 }
 
-function updateThemeComp({ comp, mode }) {
-  Object.entries(comp).forEach(([, propertyObj]) => {
-    const isNested = propertyObj.value === undefined;
+function updateReferenceModeValue({ propertyObj, mode }) {
+  const refPath = getReferencePath(propertyObj.value);
+  if (refPath) {
+    const path = refPath.split(".");
+    if (path[0] === "ag-mode") {
+      const newPath = [path[0], mode, ...path.slice(2)];
+      propertyObj.value = `{${newPath.join(".")}}`;
+    }
+  }
+}
+
+function updateThemeReferences({ propertyObj, mode }) {
+  Object.entries(propertyObj).forEach(([, innerPropertyObj]) => {
+    const isNested = innerPropertyObj.value === undefined;
 
     if (isNested) {
-      updateThemeComp({ comp: propertyObj, mode });
+      updateThemeReferences({ propertyObj: innerPropertyObj, mode });
     } else {
-      const refPath = getReferencePath(propertyObj.value);
-      if (refPath) {
-        const path = refPath.split(".");
-        if (path[0] === "mode") {
-          const newPath = [path[0], mode, ...path.slice(2)];
-          propertyObj.value = `{${newPath.join(".")}}`;
-        }
-      }
+      updateReferenceModeValue({ propertyObj: innerPropertyObj, mode });
     }
   });
 }
 
-function updateModeComp({ comp, themeName }) {
-  if (!comp) return;
+function getProperty({ path, tokens }) {
+  return path.reduce((acc, key) => {
+    if (acc && acc.hasOwnProperty(key)) {
+      return acc[key];
+    }
 
-  Object.entries(comp).forEach(([, propertyObj]) => {
-    const isNested = propertyObj.value === undefined;
+    return undefined;
+  }, tokens);
+}
+
+function updateModeReferences({ propertyObj, themeName, mode, tokens }) {
+  Object.entries(propertyObj).forEach(([, innerPropertyObj]) => {
+    const isNested = innerPropertyObj.value === undefined;
 
     if (isNested) {
-      updateModeComp({ comp: propertyObj, themeName });
+      if (typeof innerPropertyObj == "object") {
+        updateModeReferences({
+          propertyObj: innerPropertyObj,
+          themeName,
+          mode,
+          tokens,
+        });
+      }
     } else {
-      const refPath = getReferencePath(propertyObj.value);
+      const refPath = getReferencePath(innerPropertyObj.value);
       if (refPath) {
         const path = refPath.split(".");
-        if (path[0] === "themes") {
-          const newPath = [path[0], themeName, ...path.slice(2)];
-          propertyObj.value = `{${newPath.join(".")}}`;
+        if (path[0] === "ag-theme") {
+          const searchPath = [path[0], themeName, ...path.slice(2)];
+          const prop = getProperty({ path: searchPath, tokens });
+          if (prop) {
+            // Update source mode value
+            updateReferenceModeValue({ propertyObj: prop, mode });
+
+            // Update theme value that references mode
+            innerPropertyObj.value = prop.value;
+          } else {
+            console.error("Not found", {
+              searchPath,
+              path,
+              refPath,
+            });
+          }
         }
       }
     }
@@ -79,41 +119,46 @@ function updateModeComp({ comp, themeName }) {
  * NOTE: Modifies `tokens`
  */
 function updateTokenReferences({ tokens, mode }) {
-  // Update theme comp references
-  // Eg, In `themes.material.comp.ag-active-color.value`
-  // Convert `mode.material.theme.material.comp.ag-active-color` to `mode.light.theme.material.comp.ag-active-color`
-  Object.entries(tokens['ag-theme']).forEach(([, themeObj]) => {
-    updateThemeComp({ comp: themeObj.color, mode });
+  // Update theme color references
+  // Eg, In `ag-theme.material.color.ag-active-color.value`
+  // Convert `ag-mode.material.material.ag-active-color` to `ag-mode.[mode].material.ag-active-color`
+  Object.entries(tokens["ag-theme"]).forEach(([, themeObj]) => {
+    updateThemeReferences({ propertyObj: themeObj.color, mode });
   });
 
-  // Update mode theme comp references
-  // Eg, In `mode.light.theme.material.comp.ag-toggle.active-background.value`
-  // Convert `themes.light.comp.ag-checkbox-checked-color` -> `themes.material.comp.ag-checkbox-checked-color`
-  Object.entries(tokens['ag-mode'][mode]).forEach(([themeName, themeObj]) => {
-    updateModeComp({ comp: themeObj.color, themeName });
-  });
+  // Update ag-mode theme references
+  // Eg, In `ag-mode.light.alpine.ag-side-button-panel-background-color.value`
+  // Has value `ag-theme.light.color.ag-background-color`
+  // Look for `ag-theme.alpine.color.ag-background-color`
+  // Has value `{ag-mode.alpine.alpine.ag-background-color}`
+  // Return `ag-mode.light.alpine.ag-background-color`
+  Object.entries(tokens["ag-mode"][mode]).forEach(
+    ([themeName, propertyObj]) => {
+      updateModeReferences({ propertyObj, themeName, mode, tokens });
+    }
+  );
 
   // Delete other mode, so all references are valid
-  const otherModes = Object.keys(tokens['ag-mode']).filter((m) => m !== mode);
+  const otherModes = Object.keys(tokens["ag-mode"]).filter((m) => m !== mode);
   for (const otherMode of otherModes) {
-    delete tokens['ag-mode'][otherMode];
+    delete tokens["ag-mode"][otherMode];
   }
 
   // Delete charts
-  delete tokens.charts;
+  delete tokens["ag-chart"];
 }
 
 function getTokensCss(tokens) {
-  let cssOutput = '';
+  let cssOutput = "";
 
-  Object.keys(tokens).filter((key) =>
-    allProps.includes(key)
-  ).forEach((key) => {
-    const { type, value } = tokens[key];
-    const cssValue = type === 'dimension' ? `${value}px` : value;
+  Object.keys(tokens)
+    .filter((key) => allProps.includes(key))
+    .forEach((key) => {
+      const { type, value } = tokens[key];
+      const cssValue = type === "dimension" ? `${value}px` : value;
 
-    cssOutput += `  --${key}: ${cssValue};\n`;
-  });
+      cssOutput += `  --${key}: ${cssValue};\n`;
+    });
 
   return cssOutput;
 }
@@ -149,11 +194,11 @@ const outputTheme = (tokenContents) => {
 
       cssOutput += selector;
 
-      cssOutput += getTokensCss(tokenExport.themes[themeName]);
-      cssOutput += getTokensCss(tokenExport.themes[themeName].size);
-      cssOutput += getTokensCss(tokenExport.themes[themeName].space);
+      cssOutput += getTokensCss(tokenExport["ag-theme"][themeName]);
+      cssOutput += getTokensCss(tokenExport["ag-theme"][themeName].size);
+      cssOutput += getTokensCss(tokenExport["ag-theme"][themeName].space);
 
-      const themeTokens = tokenExport.mode[mode].theme[themeName].comp;
+      const themeTokens = tokenExport["ag-mode"][mode][themeName];
       Object.keys(themeTokens)
         .filter((key) => allProps.includes(key))
         .forEach((key) => {
