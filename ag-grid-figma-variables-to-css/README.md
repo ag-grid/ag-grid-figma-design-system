@@ -1,17 +1,19 @@
-# AG Grid Figma Design System Tokens to CSS Theme
+# AG Grid Figma Design System Tokens to Legacy CSS Theme
 
-Export design tokens from the AG Grid Figma Design System, and transform them into AG Grid CSS theme extension. These custom theme extensions are designed to work with our default `Quartz` theme. 
+An example project using [Style Dictionary](https://amzn.github.io/style-dictionary/#/) to transform design tokens `.json` from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) into [AG Grid Legacy Themes](https://www.ag-grid.com/javascript-data-grid/theming-migration/#continue-with-legacy-themes). Legacy themes output using this method are designed to extend the AG Grid Quartz theme.
 
+**Please note**: This project is provided as an example to show how [Style Dictionary](https://amzn.github.io/style-dictionary/#/) can be used to transform design tokens `.json` into valid AG Grid legacy themes. We recommend that you either modify this project or create your own to match your own AG Grid Figma assets and development workflow.
 
 ## Exporting Design Tokens from Figma
 
 Before you can create an AG Grid CSS theme, first you'll need to export your design tokens from Figma.
 
 1. In the Resources panel go to the Plugins tab. 
-2. Search for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens).
-3. Click run for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) and select the 'Export Design Tokens File' option. 
-4. Deselect all ‘include types...’ except for "Figma Variables"
-5. Click the 'Save & Export' button and save the json to the `./tokens/` directory.
+2. Search for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) Figma plugin.
+3. In the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) plugin settings enable the options "**Add mode to design token name (if 2 or more modes)**" and "**Add mode to design token value**".
+4. Click run for the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) and select the 'Export Design Tokens File' option. 
+5. Deselect all ‘include types...’ except for "Figma Variables"
+6. Click the 'Save & Export' button and save the json to the `./tokens/` directory.
 
 
 ## Transforming Figma JSON Output to an AG Grid CSS theme 
@@ -22,7 +24,7 @@ Install dependencies
 $ npm install
 ```
 
-Run `tokensToCss.js` and specifiy your tokens .json file to generate your AG Grid CSS themes.
+Run `tokensToCss.js` and specify your tokens .json file to generate your AG Grid CSS themes.
 
 ```sh
 $ node tokensToCss.js PATH_TO_MY_TOKENS_JSON_FILE.tokens.json
@@ -63,4 +65,4 @@ You can now extend the default AG Grid Quartz theme with your custom extension. 
 </html>
 ```
 
-See our [Themes documentation](https://ag-grid.com/javascript-data-grid/themes/) for more information. 
+See our [Legacy themes documentation](https://www.ag-grid.com/javascript-data-grid/theming-migration/#continue-with-legacy-themes) for more information. 
