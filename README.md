@@ -36,9 +36,7 @@ For more information about how Figma community files function, please review the
 
 ## Local Variables to CSS
 
-If you are using the Local Variables feature in Figma, you may also want to experiment with exporting a custom AG Grid theme extension. You can export your Figma Local Variables as a `.json` file then use the [included Node.js project](/ag-grid-figma-variables-to-css/) `ag-grid-figma-variables-to-css/` to create a custom theme extension. 
-
-Custom theme extensions can be used with our default `Quartz` theme to completely change the look of AG Grid in the browser to match your Figma designs.
+If you have created your own theme in Figma using the variables feature, you can export those variables and use the [Style Dictionary](https://amzn.github.io/style-dictionary/#/) NPM package to create an [AG Grid legacy CSS theme](https://ag-grid.com/react-data-grid/theming/#legacy-themes). An example Style Dictionary project and full instructions are included in the `ag-grid-figma-variables-to-css/` directory. 
 
 <br />
 
