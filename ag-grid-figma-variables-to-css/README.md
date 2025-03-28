@@ -66,3 +66,6 @@ You can now extend the default AG Grid Quartz theme with your custom extension. 
 ```
 
 See our [Legacy themes documentation](https://www.ag-grid.com/javascript-data-grid/theming-migration/#continue-with-legacy-themes) for more information. 
+
+## Licence
+This example project is under the MIT license. See `LICENSE.txt` for more information. 
