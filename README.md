@@ -8,9 +8,9 @@ Welcome to the [AG Grid](https://github.com/ag-grid/ag-grid) Figma Design System
 
 This directory contains the following:
 
-- `ag-grid-figma-variables-to-css/` - A sample node.js project to convert Figma Local Variables to CSS
-- `figma-file-archive/` - An archive of previous versions
-- `token-studio-archive/` - An archive of Token studios json
+
+- `/theme-example-dir/` <!-- TODO: Write up LV to JS theming API example instructions. -->
+- `/archive/`: Archived resources for the AG Grid Figma Design System. 
 
 <br />
 
@@ -18,7 +18,7 @@ This directory contains the following:
 
 The AG Grid Figma Design System supports:
 
-- Quartz, Alpine, & Material themes in light mode & darkmode
+- Quartz, and Alpine themes in light mode & darkmode
 - All **core** Grid components, which are a mirror image of the components in the AG Grid library
 - Conversion of Figma Local Variables to CSS with the `ag-grid-figma-variables-to-css` sample project
 
@@ -34,9 +34,9 @@ For more information about how Figma community files function, please review the
 
 <br />
 
-## Local Variables to CSS
+## Local Variables to AG Grid theme
 
-If you have created your own theme in Figma using the variables feature, you can export those variables and use the [Style Dictionary](https://amzn.github.io/style-dictionary/#/) NPM package to create an [AG Grid legacy CSS theme](https://ag-grid.com/react-data-grid/theming/#legacy-themes). An example Style Dictionary project and full instructions are included in the `ag-grid-figma-variables-to-css/` directory. 
+<!-- TODO: Write up LV to JS theming API example instructions. -->
 
 <br />
 
