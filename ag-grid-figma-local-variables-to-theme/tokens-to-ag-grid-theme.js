@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { parseArgs } from "util";
 
 import StyleDictionary from "style-dictionary";
@@ -191,4 +191,19 @@ const agGridTheme = Object.keys(unsortedAgGridTheme)
     return sortedTheme;
   }, {});
 
-console.log(agGridTheme);
+// Generate the filename: [theme]-[mode]-theme.js
+const filename = `${THEME}-${MODE}-theme.js`;
+const filepath = `./themes/${filename}`;
+
+// Capitalize first letter of theme and mode for variable name
+const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+const variableName = `${THEME}${capitalizeFirst(MODE)}Theme`;
+
+// Generate the JavaScript file content
+const fileContent = `export const ${variableName} = ${JSON.stringify(agGridTheme, null, 2)};
+`;
+
+// Save the file
+writeFileSync(filepath, fileContent, "utf8");
+
+console.log(`✅  Theme conversion completed! File saved as: ${filepath}`);
