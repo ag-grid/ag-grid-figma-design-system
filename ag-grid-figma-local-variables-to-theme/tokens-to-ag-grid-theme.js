@@ -52,21 +52,18 @@ const THEME_BORDER_PARAM_NAMES_LOWERCASE = THEME_BORDER_PARAM_NAMES.map(
   (paramName) => paramName.toLowerCase()
 );
 
-// Initialize Style Dictionary with the imported tokens
-const sd = new StyleDictionary({
-  tokens: exampleTokens,
-});
-
-await sd.hasInitialized;
-
-// Convert token data to a structured object format
-const convertedTokensData = convertTokenData(sd.tokens, { output: "object" });
-
 // Transforms color cliArgs by replacing theme references with the current mode
 const transformColorValue = (colorValue) => {
   if (typeof colorValue !== "string") return colorValue;
 
   return colorValue.replace(THEME, MODE);
+};
+
+// Fixes incorrect "space" references to "spacing"
+const fixSpaceReferences = (value) => {
+  if (typeof value !== "string") return value;
+
+  return value.replace(".size.space}", ".size.spacing}");
 };
 
 // Transforms all color tokens in the provided object
@@ -78,14 +75,14 @@ const transformColorTokens = (colorTokens) => {
   }, {});
 };
 
-// Extract size and color tokens for the selected theme
-const sizeTokens = convertedTokensData[AG_THEME_PREFIX][THEME].size;
-const colorTokens = transformColorTokens(
-  convertedTokensData[AG_THEME_PREFIX][THEME].color
-);
+// Transforms all tokens to fix space references
+const transformSizeTokens = (sizeTokens) => {
+  return Object.entries(sizeTokens).reduce((acc, [key, token]) => {
+    acc[key] = { ...token, value: fixSpaceReferences(token.value) };
 
-// Combine size and color tokens into a single object
-const allThemeTokens = { ...sizeTokens, ...colorTokens };
+    return acc;
+  }, {});
+};
 
 // Checks if a given key is a valid AG-Grid theme parameter name
 const isThemeParamName = (key) => {
@@ -139,6 +136,27 @@ const parseBorderValue = (borderName, allTokens, sd) => {
     style: "solid",
   };
 };
+
+// Initialize Style Dictionary with the imported tokens
+const sd = new StyleDictionary({
+  tokens: exampleTokens,
+});
+
+await sd.hasInitialized;
+
+// Convert token data to a structured object format
+const convertedTokensData = convertTokenData(sd.tokens, { output: "object" });
+
+// Extract size and color tokens for the selected theme
+const sizeTokens = transformSizeTokens(
+  convertedTokensData[AG_THEME_PREFIX][THEME].size
+);
+const colorTokens = transformColorTokens(
+  convertedTokensData[AG_THEME_PREFIX][THEME].color
+);
+
+// Combine size and color tokens into a single object
+const allThemeTokens = { ...sizeTokens, ...colorTokens };
 
 // Build the final theme object by filtering and resolving valid theme parameters
 const unsortedAgGridTheme = Object.entries(allThemeTokens).reduce(
