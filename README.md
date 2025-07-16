@@ -8,9 +8,8 @@ Welcome to the [AG Grid](https://github.com/ag-grid/ag-grid) Figma Design System
 
 This directory contains the following:
 
-
-- `/theme-example-dir/` <!-- TODO: Write up LV to JS theming API example instructions. -->
-- `/archive/`: Archived resources for the AG Grid Figma Design System. 
+- `/ag-grid-figma-local-variables-to-theme/` Transform exported Figma local variables json into working AG Grid themes
+- `/archive/`: Archived resources for the AG Grid Figma Design System.
 
 <br />
 
@@ -36,7 +35,9 @@ For more information about how Figma community files function, please review the
 
 ## Local Variables to AG Grid theme
 
-<!-- TODO: Write up LV to JS theming API example instructions. -->
+If you have created your own theme in Figma using the local variables you can export those values as json using the [Design Tokens](https://www.figma.com/community/plugin/888356646278934516/design-tokens) Figma plugin. You can then use this tokens json to create a real AG Grid theme.
+
+An example [Style Dictionary](http://styledictionary.com/) project and full instructions are included in the `/ag-grid-figma-local-variables-to-theme/` directory.
 
 <br />
 

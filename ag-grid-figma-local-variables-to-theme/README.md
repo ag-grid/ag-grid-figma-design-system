@@ -1,8 +1,8 @@
 # AG Grid Figma Design System Tokens to AG Grid Theme
 
-An example project using [Style Dictionary](https://amzn.github.io/style-dictionary/#/) to transform design tokens `.json` from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) into [AG Grid Theming API](https://www.ag-grid.com/javascript-data-grid/theming-api/) theme objects.
+An example project using [Style Dictionary](http://styledictionary.com/) to transform design tokens `.json` from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) into [AG Grid Theming API](https://www.ag-grid.com/javascript-data-grid/theming-api/) theme objects.
 
-**Please note**: This project is provided as an example to show how [Style Dictionary](https://amzn.github.io/style-dictionary/#/) can be used to transform design tokens `.json` into valid AG Grid theme objects. We recommend that you either modify this project or create your own to match your own AG Grid Figma assets and development workflow.
+**Please note**: This project is provided as an example to show how [Style Dictionary](http://styledictionary.com/) can be used to transform design tokens `.json` into valid AG Grid theme objects. We recommend that you either modify this project or create your own to match your own AG Grid Figma assets and development workflow.
 
 ## Prerequisites
 
