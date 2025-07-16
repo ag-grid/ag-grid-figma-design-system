@@ -141,7 +141,7 @@ const parseBorderValue = (borderName, allTokens, sd) => {
 };
 
 // Build the final theme object by filtering and resolving valid theme parameters
-const agGridTheme = Object.entries(allThemeTokens).reduce(
+const unsortedAgGridTheme = Object.entries(allThemeTokens).reduce(
   (themeParams, [key, token]) => {
     // Handle regular theme parameters
     if (isThemeParamName(key)) {
@@ -164,5 +164,13 @@ const agGridTheme = Object.entries(allThemeTokens).reduce(
   },
   {}
 );
+
+// Sort the theme object alphabetically by key
+const agGridTheme = Object.keys(unsortedAgGridTheme)
+  .sort()
+  .reduce((sortedTheme, key) => {
+    sortedTheme[key] = unsortedAgGridTheme[key];
+    return sortedTheme;
+  }, {});
 
 console.log(agGridTheme);
