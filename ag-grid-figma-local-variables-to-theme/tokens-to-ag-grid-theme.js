@@ -11,7 +11,7 @@ import {
 import { THEME_PARAM_NAMES } from "./data/paramNames.js";
 
 // Parse command line arguments
-const { cliArgs } = parseArgs({
+const cliArgs = parseArgs({
   args: process.argv.slice(2),
   options: {
     tokens: {
@@ -22,12 +22,12 @@ const { cliArgs } = parseArgs({
       type: "string",
       default: "quartz",
     },
-    code: {
+    mode: {
       type: "string",
       default: "light",
     },
   },
-});
+}).values;
 
 // Configuration for theme generation
 const TOKENS_FILE = cliArgs.tokens || "./tokens/example-tokens-14-07-25.json";
