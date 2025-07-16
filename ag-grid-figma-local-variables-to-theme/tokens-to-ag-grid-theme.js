@@ -4,11 +4,16 @@ import {
   resolveReferences,
   usesReferences,
 } from "style-dictionary/utils";
+import { THEME_PARAM_NAMES } from "./data/paramNames.js";
 
 import exampleTokens from "./tokens/example-tokens-14-07-25.json" with { type: "json" };
 
 const THEME = "quartz";
 const MODE = "light";
+
+const THEME_PARAM_NAMES_LOWERCASE = THEME_PARAM_NAMES.map((paramName) =>
+  paramName.toLowerCase()
+);
 
 const sd = new StyleDictionary({
   tokens: exampleTokens,
@@ -41,8 +46,18 @@ const themeColorTokensObj = transformColorTokens(
 
 const themeTokensObj = { ...themeSizeTokensObj, ...themeColorTokensObj };
 
+const isThemeParamName = (key) => {
+  return THEME_PARAM_NAMES_LOWERCASE.includes(key);
+};
+
+const getThemeParamName = (key) => {
+  return THEME_PARAM_NAMES[THEME_PARAM_NAMES_LOWERCASE.indexOf(key)];
+};
+
 const theme = Object.entries(themeTokensObj).reduce((acc, [key, token]) => {
-  acc[key] = usesReferences(token.value)
+  if (!isThemeParamName(key)) return acc;
+
+  acc[getThemeParamName(key)] = usesReferences(token.value)
     ? resolveReferences(token.value, sd.tokens, { warnImmediately: false })
     : token.value;
 
