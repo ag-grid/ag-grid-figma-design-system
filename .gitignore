@@ -1,4 +1,4 @@
 .DS_Store
 .vscode
 
-ag-grid-figma-variables-to-css/node_modules
+node_modules
