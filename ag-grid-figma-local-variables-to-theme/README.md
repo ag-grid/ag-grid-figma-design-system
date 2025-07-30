@@ -76,16 +76,16 @@ import {
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 // Exported theme content
-export const myExportedTheme = {
+export const myExportedDarkTheme = {
   //...
 };
 
 const myTheme = themeQuartz.withParams(myExportedDarkTheme);
 
-const gridOptions: GridOptions<IOlympicData> = {
+const gridOptions = {
   theme: myTheme,
   //...
 };
 
-createGrid(document.querySelector<HTMLElement>("#myGrid")!, gridOptions);
+createGrid(document.querySelector("#myGrid"), gridOptions);
 ```
