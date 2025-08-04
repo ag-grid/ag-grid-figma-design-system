@@ -41,7 +41,7 @@ The script accepts the following optional command line arguments:
 
 ```sh
 # Generate a custom theme with specific tokens
-node tokens-to-ag-grid-theme.js --tokens ./tokens/custom-tokens.json --theme material --mode light
+node tokens-to-ag-grid-theme.js --tokens ./tokens/custom-tokens.json --theme alpine --mode light
 ```
 
 ## Output
