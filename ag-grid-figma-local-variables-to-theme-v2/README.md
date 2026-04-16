@@ -7,14 +7,6 @@ This is the v2 version, designed for the newer Figma export format where each JS
 ## Prerequisites
 
 - Node.js v18+
-- npm or yarn
-- AG Grid v32+
-
-## Installation
-
-```bash
-npm install
-```
 
 ## Exporting Tokens from Figma
 
@@ -56,21 +48,6 @@ export const quartzLightTheme = {
   // ... more theme parameters
 };
 ```
-
-## Validating Output
-
-A validation script is included that tests the generated theme against AG Grid:
-
-```bash
-node validate-theme.js ./themes/quartzLight-ag-grid-theme.js
-```
-
-This checks that:
-- All keys are valid AG Grid theme parameters
-- Value types are correct (colors, numbers, border objects, shadows)
-- AG Grid's `themeQuartz.withParams()` accepts the theme without errors
-
-Requires `ag-grid-community` (installed as a devDependency).
 
 ## Using the Generated Theme
 
