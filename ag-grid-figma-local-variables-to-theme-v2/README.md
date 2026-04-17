@@ -1,44 +1,44 @@
-# AG Grid Figma Local Variables to Theme (v2)
+# AG Grid Figma Design System Local Variables to Theme
 
-Converts Figma design tokens exported in the W3C Design Token Community Group (DTCG) format into AG Grid Theming API objects.
+An example project that transforms design tokens `.json` exported from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) into [AG Grid Theming API](https://www.ag-grid.com/javascript-data-grid/theming-api/) theme objects, using the W3C Design Token Community Group (DTCG) format. Each exported JSON file represents a single theme/mode combination (e.g. "Quartz Light", "Alpine Dark").
 
-This is the v2 version, designed for the newer Figma export format where each JSON file represents a single theme/mode combination (e.g., "Quartz Light", "Alpine Dark").
+**Please note**: This project is provided as an example to show how design tokens `.json` can be transformed into valid AG Grid theme objects. We recommend that you either modify this project or create your own to match your own AG Grid Figma assets and development workflow.
 
 ## Prerequisites
 
-- Node.js v18+
+- Node.js (v18 or higher)
+- npm
+- AG Grid v32 or higher (for using the generated themes)
 
-## Exporting Tokens from Figma
+## Exporting Design Tokens from Figma
 
-1. Open your AG Grid Figma design system file
-2. Go to **Resources** > **Plugins** tab
-3. Search for the **"Variables Import Export"** plugin
-4. Export variables in **DTCG format**
-5. Save the JSON file to the `./tokens/` directory
+The example project expects a tokens `.json` file for a single local variables "mode".
 
-Each export produces one file per theme/mode (e.g., `quartz-light.json`, `alpine-dark.json`).
+- Open the local variables panel within the AG Grid Figma Design System file.
+- Select the "AG Theme" collection.
+- Right-click on the header of the "mode" you wish to export.
+- Click "Export mode" and save the tokens `.json` file to your computer.
 
-## Usage
+### Command Line Arguments
 
-```bash
-node tokens-to-ag-grid-theme.js --tokens ./tokens/example-v2-tokens.json
+The script accepts the following optional command line argument:
+
+- `--tokens`: Path to the design tokens JSON file (default: `./tokens/quartz-light-example-tokens.json`)
+
+The theme name and mode are automatically derived from the file's `$extensions["com.figma.modeName"]` field.
+
+### Example
+
+```sh
+# Generate a theme from a specific tokens file
+node tokens-to-ag-grid-theme.js --tokens ./tokens/quartz-light-example-tokens.json
 ```
 
-### Arguments
+## Output
 
-| Argument   | Description                     | Default                              |
-| ---------- | ------------------------------- | ------------------------------------ |
-| `--tokens` | Path to the design tokens JSON  | `./tokens/example-v2-tokens.json`    |
+The script generates a JavaScript file in the `/themes/` directory. Each file exports a theme object that can be directly used with the AG Grid Theming API.
 
-The theme name and mode are automatically extracted from the file's `$extensions["com.figma.modeName"]` field.
-
-### Output
-
-The script generates a JavaScript file in the `./themes/` directory:
-
-```
-./themes/quartzLight-ag-grid-theme.js
-```
+Example output file: `/themes/quartzLight-ag-grid-theme.js`
 
 ```javascript
 export const quartzLightTheme = {
@@ -49,21 +49,33 @@ export const quartzLightTheme = {
 };
 ```
 
-## Using the Generated Theme
+## Using the Generated Themes
+
+To use the generated themes in your AG Grid application, refer to the [AG Grid Theming API documentation](https://www.ag-grid.com/javascript-data-grid/theming-api/).
+
+### Example usage:
 
 ```javascript
-import { themeQuartz } from "ag-grid-community";
-import { quartzLightTheme } from "./themes/quartzLight-ag-grid-theme.js";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  createGrid,
+  themeQuartz,
+} from "ag-grid-community";
+
+ModuleRegistry.registerModules([AllCommunityModule]);
+
+// Exported theme content
+export const quartzLightTheme = {
+  //...
+};
 
 const myTheme = themeQuartz.withParams(quartzLightTheme);
+
+const gridOptions = {
+  theme: myTheme,
+  //...
+};
+
+createGrid(document.querySelector("#myGrid"), gridOptions);
 ```
-
-## Differences from v1
-
-| Aspect           | v1                                        | v2 (this project)                    |
-| ---------------- | ----------------------------------------- | ------------------------------------ |
-| Export format    | `org.lukasoppermann` Design Tokens plugin | W3C DTCG format (`com.figma.*`)      |
-| Input structure  | Single file with all themes/modes         | One file per theme/mode              |
-| CLI args         | `--tokens`, `--theme`, `--mode`           | `--tokens` only                      |
-| Dependencies     | Style Dictionary v5                       | None (raw Node.js)                   |
-| References       | Complex cross-collection                  | Simple `{category.tokenName}`        |

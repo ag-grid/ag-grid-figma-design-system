@@ -1,49 +1,78 @@
 import { readFileSync, writeFileSync } from "fs";
 import { parseArgs } from "util";
+
 import {
   THEME_PARAM_NAMES,
   THEME_BORDER_PARAM_NAMES,
 } from "./data/paramNames.js";
 
-// --- CLI ---
-
-const { values: args } = parseArgs({
+// Parse command line arguments
+const cliArgs = parseArgs({
   args: process.argv.slice(2),
   options: {
     tokens: {
       type: "string",
-      default: "./tokens/example-v2-tokens.json",
+      default: "./tokens/quartz-light-example-tokens.json",
     },
   },
-});
+}).values;
 
-// --- Load tokens ---
+// Configuration for theme generation
+const TOKENS_FILE =
+  cliArgs.tokens || "./tokens/quartz-light-example-tokens.json";
 
-const tokensJson = JSON.parse(readFileSync(args.tokens, "utf-8"));
+// Load Figma design tokens from JSON file
+const tokensJson = readFileSync(TOKENS_FILE, "utf-8");
+const exampleTokens = JSON.parse(tokensJson);
 
-// --- Extract mode name ---
-
-const modeName = tokensJson.$extensions?.["com.figma.modeName"];
+// Extract the mode name from Figma extensions metadata (e.g., "Quartz Light")
+const modeName = exampleTokens.$extensions?.["com.figma.modeName"];
 if (!modeName) {
   throw new Error(
-    'No "com.figma.modeName" found in $extensions. Is this a valid v2 token file?'
+    'No "com.figma.modeName" found in $extensions. Is this a valid token file?',
   );
 }
 
-// "Quartz Light" → "quartzLight"
-const varName = modeName
+const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+// Derive the camelCase theme name used for the export variable and filename
+const themeName = modeName
   .split(/\s+/)
-  .map((word, i) =>
-    i === 0
-      ? word.toLowerCase()
-      : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  )
+  .map((word, i) => {
+    const lower = word.toLowerCase();
+    return i === 0 ? lower : capitalizeFirst(lower);
+  })
   .join("");
 
-console.log(`Processing: ${modeName} → ${varName}Theme`);
+const THEME_PARAM_NAMES_LOWERCASE = THEME_PARAM_NAMES.map((paramName) =>
+  paramName.toLowerCase(),
+);
 
-// --- Build flat token map ---
+// Converts a lowercase key to its properly cased theme parameter name
+const getThemeParamName = (key) => {
+  return THEME_PARAM_NAMES[
+    THEME_PARAM_NAMES_LOWERCASE.indexOf(key.toLowerCase())
+  ];
+};
 
+// Finds the border parameter name that matches the given key (for width tokens)
+const getBorderParamName = (key) => {
+  return THEME_BORDER_PARAM_NAMES.find(
+    (paramName) => paramName.toLowerCase() + "width" === key.toLowerCase(),
+  );
+};
+
+// Checks if a given key is a valid AG-Grid theme parameter name
+const isThemeParamName = (key) => {
+  return getThemeParamName(key) !== undefined;
+};
+
+// Checks if a given key is a border width parameter
+const isBorderWidthParam = (key) => {
+  return getBorderParamName(key) !== undefined;
+};
+
+// Shadow parameters use special string handling and do not resolve through colorToHex
 const SHADOW_PARAMS = new Set([
   "cardShadow",
   "cellEditingShadow",
@@ -56,143 +85,134 @@ const SHADOW_PARAMS = new Set([
   "popupShadow",
 ]);
 
-const flatTokens = {};
+// Flatten the nested Figma token structure into a single lookup map keyed by token name
+const flatTokens = Object.entries(exampleTokens).reduce(
+  (acc, [category, categoryObj]) => {
+    if (category === "$extensions") return acc;
+    if (!categoryObj || typeof categoryObj !== "object") return acc;
+    if (categoryObj.$type) return acc;
 
-for (const [category, categoryObj] of Object.entries(tokensJson)) {
-  if (category === "$extensions") continue;
-  if (!categoryObj || typeof categoryObj !== "object") continue;
-  if (categoryObj.$type) continue; // skip top-level tokens like "Color"
+    Object.entries(categoryObj).forEach(([tokenName, tokenObj]) => {
+      if (!tokenObj || typeof tokenObj !== "object" || !tokenObj.$type) return;
+      if (category === "charts" && acc[tokenName]) return;
 
-  for (const [tokenName, tokenObj] of Object.entries(categoryObj)) {
-    if (!tokenObj || typeof tokenObj !== "object" || !tokenObj.$type) continue;
+      acc[tokenName] = {
+        $type: tokenObj.$type,
+        $value: tokenObj.$value,
+        category,
+      };
+    });
 
-    // For duplicates across categories: non-charts wins
-    if (category === "charts" && flatTokens[tokenName]) continue;
+    return acc;
+  },
+  {},
+);
 
-    flatTokens[tokenName] = {
-      $type: tokenObj.$type,
-      $value: tokenObj.$value,
-      category,
-    };
-  }
-}
-
-// --- Reference resolution ---
-
-function resolveValue(value, depth = 0) {
+// Recursively resolves token references of the form "{category.tokenName}"
+const resolveValue = (value, depth = 0) => {
   if (depth > 10) {
     console.warn("Warning: circular reference detected, stopping resolution");
     return value;
   }
-  if (typeof value === "string" && value.startsWith("{") && value.endsWith("}")) {
-    const refPath = value.slice(1, -1); // "foundations.foregroundColor"
-    const tokenName = refPath.split(".").pop(); // "foregroundColor"
+
+  if (
+    typeof value === "string" &&
+    value.startsWith("{") &&
+    value.endsWith("}")
+  ) {
+    const refPath = value.slice(1, -1);
+    const tokenName = refPath.split(".").pop();
     const referenced = flatTokens[tokenName];
+
     if (!referenced) {
       console.warn(`Warning: unresolved reference ${value}`);
       return value;
     }
+
     return resolveValue(referenced.$value, depth + 1);
   }
+
   return value;
-}
+};
 
-// --- Color conversion ---
-
-function colorToHex(colorValue) {
+// Converts a Figma color object ({hex, alpha}) into a CSS hex string with optional alpha channel
+const colorToHex = (colorValue) => {
   if (typeof colorValue === "string") return colorValue;
+
   const { hex, alpha } = colorValue;
   const hexLower = hex.toLowerCase();
+
   if (alpha >= 1) return hexLower;
   if (alpha <= 0) return hexLower + "00";
+
   const alphaHex = Math.round(alpha * 255)
     .toString(16)
     .padStart(2, "0");
+
   return hexLower + alphaHex;
-}
+};
 
-// --- Convert a token value for output ---
-
-function convertValue(tokenName, type, rawValue) {
+// Converts a raw token value into the shape AG-Grid expects
+// Handles shadow params (fall back to "none"), color objects (hex strings),
+// and browserColorScheme (lowercase to match CSS color-scheme values)
+const convertValue = (tokenName, type, rawValue) => {
   const resolved = resolveValue(rawValue);
 
-  // Shadow params
   if (SHADOW_PARAMS.has(tokenName)) {
     if (typeof resolved === "string") return resolved;
-    if (typeof resolved === "number" && resolved === 0) return "none";
     return "none";
   }
 
-  // Color
-  if (type === "color" && typeof resolved === "object" && resolved !== null && resolved.hex) {
+  if (
+    type === "color" &&
+    typeof resolved === "object" &&
+    resolved !== null &&
+    resolved.hex
+  ) {
     return colorToHex(resolved);
   }
 
-  // String
   if (type === "string") {
     if (tokenName === "browserColorScheme") return resolved.toLowerCase();
     return resolved;
   }
 
-  // Number
-  if (type === "number") return resolved;
-
   return resolved;
-}
+};
 
-// --- Build param lookup maps ---
+// Parses border value from width and color tokens and creates a border object
+const parseBorderValue = (borderName, allTokens) => {
+  const widthKey = borderName + "Width";
+  const colorKey = borderName + "Color";
 
-const paramNamesLower = new Map(
-  THEME_PARAM_NAMES.map((n) => [n.toLowerCase(), n])
-);
-const borderNamesLower = new Map(
-  THEME_BORDER_PARAM_NAMES.map((n) => [n.toLowerCase(), n])
-);
+  const widthToken = allTokens[widthKey];
+  const colorToken = allTokens[colorKey];
 
-// --- Build theme object ---
+  if (!widthToken || !colorToken) return null;
 
-const unsortedTheme = {};
+  const width = resolveValue(widthToken.$value);
+  const resolvedColor = resolveValue(colorToken.$value);
+  const color =
+    typeof resolvedColor === "object" && resolvedColor !== null
+      ? colorToHex(resolvedColor)
+      : resolvedColor;
 
-// Pass 1: Regular params (not border param names themselves)
-for (const [tokenName, token] of Object.entries(flatTokens)) {
-  const paramName = paramNamesLower.get(tokenName.toLowerCase());
-  if (paramName && !borderNamesLower.has(tokenName.toLowerCase())) {
-    unsortedTheme[paramName] = convertValue(paramName, token.$type, token.$value);
-  }
-}
+  return {
+    width,
+    color,
+    style: "solid",
+  };
+};
 
-// Pass 2: Border params — combine {name}Color + {name}Width into objects
-for (const borderName of THEME_BORDER_PARAM_NAMES) {
-  const widthToken = flatTokens[borderName + "Width"];
-  const colorToken = flatTokens[borderName + "Color"];
-
-  if (widthToken && colorToken) {
-    const width = resolveValue(widthToken.$value);
-    const colorResolved = resolveValue(colorToken.$value);
-    const color =
-      typeof colorResolved === "object" && colorResolved !== null
-        ? colorToHex(colorResolved)
-        : colorResolved;
-    unsortedTheme[borderName] = { width, color, style: "solid" };
-  }
-}
-
-// Sort alphabetically
-const theme = Object.keys(unsortedTheme)
-  .sort()
-  .reduce((acc, key) => {
-    acc[key] = unsortedTheme[key];
-    return acc;
-  }, {});
-
-// --- Format JS output ---
-
-function formatJSObject(obj, indent = 2) {
+// Formats a JavaScript object with unquoted keys for standard JS object syntax
+const formatJSObject = (obj, indent = 2) => {
   const spaces = " ".repeat(indent);
   const entries = Object.entries(obj);
+
   if (entries.length === 0) return "{}";
 
   const formattedEntries = entries.map(([key, value]) => {
+    // Check if key needs quotes (contains special characters, spaces, or starts with number)
     const needsQuotes = /[^a-zA-Z0-9_$]/.test(key) || /^[0-9]/.test(key);
     const formattedKey = needsQuotes ? `"${key}"` : key;
 
@@ -209,14 +229,47 @@ function formatJSObject(obj, indent = 2) {
   });
 
   return `{\n${formattedEntries.join(",\n")}\n${" ".repeat(indent - 2)}}`;
-}
+};
 
-// --- Write output ---
+// Build the final theme object by filtering and resolving valid theme parameters
+const unsortedAgGridTheme = Object.entries(flatTokens).reduce(
+  (themeParams, [tokenName, token]) => {
+    if (isThemeParamName(tokenName)) {
+      const paramName = getThemeParamName(tokenName);
+      themeParams[paramName] = convertValue(
+        paramName,
+        token.$type,
+        token.$value,
+      );
+    }
 
-const outputPath = `./themes/${varName}-ag-grid-theme.js`;
-const content = `export const ${varName}Theme = ${formatJSObject(theme)};\n`;
+    // Handle border parameters by combining width and color tokens into border objects
+    if (isBorderWidthParam(tokenName)) {
+      const borderParamName = getBorderParamName(tokenName);
+      const borderValue = parseBorderValue(borderParamName, flatTokens);
 
-writeFileSync(outputPath, content, "utf-8");
+      if (borderValue) {
+        themeParams[borderParamName] = borderValue;
+      }
+    }
 
-const paramCount = Object.keys(theme).length;
-console.log(`Wrote ${paramCount} params to ${outputPath}`);
+    return themeParams;
+  },
+  {},
+);
+
+// Sort the theme object alphabetically by key for consistent output
+const agGridTheme = Object.keys(unsortedAgGridTheme)
+  .sort()
+  .reduce((sortedTheme, key) => {
+    sortedTheme[key] = unsortedAgGridTheme[key];
+    return sortedTheme;
+  }, {});
+
+const filepath = `./themes/${themeName}-ag-grid-theme.js`;
+const fileContent = `export const ${themeName}Theme = ${formatJSObject(agGridTheme)};\n`;
+
+// Write the formatted theme object to a JavaScript file
+writeFileSync(filepath, fileContent, "utf8");
+
+console.log(`✅  Theme conversion completed! File saved as: ${filepath}`);
