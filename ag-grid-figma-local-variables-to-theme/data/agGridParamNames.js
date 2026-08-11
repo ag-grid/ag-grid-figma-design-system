@@ -1,4 +1,4 @@
-export const THEME_PARAM_NAMES = [
+export const AG_GRID_PARAM_NAMES = [
   "accentColor",
   "advancedFilterBuilderColumnPillColor",
   "advancedFilterBuilderIndentSize",
@@ -199,7 +199,7 @@ export const THEME_PARAM_NAMES = [
   "wrapperBorderRadius",
 ];
 
-export const THEME_BORDER_PARAM_NAMES = [
+export const AG_GRID_BORDER_PARAM_NAMES = [
   "advancedFilterBuilderButtonBarBorder",
   "buttonBorder",
   "buttonHoverBorder",
