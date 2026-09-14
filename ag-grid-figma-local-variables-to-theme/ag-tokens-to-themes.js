@@ -2,9 +2,13 @@ import { readFileSync, writeFileSync } from "fs";
 import { parseArgs } from "util";
 
 import {
-  THEME_PARAM_NAMES,
-  THEME_BORDER_PARAM_NAMES,
-} from "./data/paramNames.js";
+  AG_GRID_PARAM_NAMES,
+  AG_GRID_BORDER_PARAM_NAMES,
+} from "./data/agGridParamNames.js";
+import {
+  AG_STUDIO_PARAM_NAMES,
+  AG_STUDIO_BORDER_PARAM_NAMES,
+} from "./data/agStudioParamNames.js";
 
 // Parse command line arguments
 const cliArgs = parseArgs({
@@ -14,12 +18,28 @@ const cliArgs = parseArgs({
       type: "string",
       default: "./tokens/quartz-light-example-tokens.json",
     },
+    product: {
+      type: "string",
+      default: "ag-grid",
+    },
   },
 }).values;
 
 // Configuration for theme generation
 const TOKENS_FILE =
   cliArgs.tokens || "./tokens/quartz-light-example-tokens.json";
+
+// Which product's theme API to target: "ag-grid" (AG Grid Theming API) or
+// "ag-studio" (AG Studio theme API)
+const PRODUCT = cliArgs.product || "ag-grid";
+
+if (PRODUCT !== "ag-grid" && PRODUCT !== "ag-studio") {
+  throw new Error(
+    `Unknown --product "${PRODUCT}". Expected "ag-grid" (default) or "ag-studio".`,
+  );
+}
+
+const isAgStudio = PRODUCT === "ag-studio";
 
 // Load Figma design tokens from JSON file
 const tokensJson = readFileSync(TOKENS_FILE, "utf-8");
@@ -44,36 +64,50 @@ const themeName = modeName
   })
   .join("");
 
-const THEME_PARAM_NAMES_LOWERCASE = THEME_PARAM_NAMES.map((paramName) =>
+const AG_GRID_PARAM_NAMES_LOWERCASE = AG_GRID_PARAM_NAMES.map((paramName) =>
   paramName.toLowerCase(),
 );
 
-// Converts a lowercase key to its properly cased theme parameter name
-const getThemeParamName = (key) => {
-  return THEME_PARAM_NAMES[
-    THEME_PARAM_NAMES_LOWERCASE.indexOf(key.toLowerCase())
+// Converts a lowercase key to its properly cased AG Grid theme parameter name
+const getAgGridParamName = (key) => {
+  return AG_GRID_PARAM_NAMES[
+    AG_GRID_PARAM_NAMES_LOWERCASE.indexOf(key.toLowerCase())
   ];
 };
 
-// Finds the border parameter name that matches the given key (for width tokens)
-const getBorderParamName = (key) => {
-  return THEME_BORDER_PARAM_NAMES.find(
+// Finds the AG Grid border parameter name that matches the given key (for width tokens)
+const getAgGridBorderParamName = (key) => {
+  return AG_GRID_BORDER_PARAM_NAMES.find(
     (paramName) => paramName.toLowerCase() + "width" === key.toLowerCase(),
   );
 };
 
-// Checks if a given key is a valid AG-Grid theme parameter name
-const isThemeParamName = (key) => {
-  return getThemeParamName(key) !== undefined;
+// Checks if a given key is a valid AG Grid theme parameter name
+const isAgGridParamName = (key) => {
+  return getAgGridParamName(key) !== undefined;
 };
 
-// Checks if a given key is a border width parameter
-const isBorderWidthParam = (key) => {
-  return getBorderParamName(key) !== undefined;
+// Checks if a given key is an AG Grid border width parameter
+const isAgGridBorderWidthParam = (key) => {
+  return getAgGridBorderParamName(key) !== undefined;
 };
 
-// Shadow parameters use special string handling and do not resolve through colorToHex
-const SHADOW_PARAMS = new Set([
+const AG_STUDIO_PARAM_NAMES_LOWERCASE = AG_STUDIO_PARAM_NAMES.map((paramName) =>
+  paramName.toLowerCase(),
+);
+
+// Converts a lowercase key to its properly cased AG Studio theme parameter name
+const getAgStudioParamName = (key) => {
+  return AG_STUDIO_PARAM_NAMES[
+    AG_STUDIO_PARAM_NAMES_LOWERCASE.indexOf(key.toLowerCase())
+  ];
+};
+
+// AG Studio parameters that take a BorderValue, which the Figma export models as a boolean
+const AG_STUDIO_BORDER_PARAMS = new Set(AG_STUDIO_BORDER_PARAM_NAMES);
+
+// AG Grid shadow parameters use special string handling and do not resolve through colorToHex
+const AG_GRID_SHADOW_PARAMS = new Set([
   "cardShadow",
   "cellEditingShadow",
   "dialogShadow",
@@ -86,8 +120,8 @@ const SHADOW_PARAMS = new Set([
 ]);
 
 // Flatten the nested Figma token structure into a single lookup map keyed by token name
-const flatTokens = Object.entries(exampleTokens).reduce(
-  (acc, [category, categoryObj]) => {
+const flattenAgGridTokens = () =>
+  Object.entries(exampleTokens).reduce((acc, [category, categoryObj]) => {
     if (category === "$extensions") return acc;
     if (!categoryObj || typeof categoryObj !== "object") return acc;
     if (categoryObj.$type) return acc;
@@ -104,9 +138,34 @@ const flatTokens = Object.entries(exampleTokens).reduce(
     });
 
     return acc;
-  },
-  {},
-);
+  }, {});
+
+// The AG Studio export nests some tokens more than one level deep (e.g. "chart.core.*"),
+// so walk the tree recursively. The dotted path is kept for warning messages.
+const flattenAgStudioTokens = (obj, path = "", acc = {}) => {
+  Object.entries(obj).forEach(([key, value]) => {
+    if (key.startsWith("$")) return;
+    if (!value || typeof value !== "object") return;
+
+    if (value.$type) {
+      acc[key] = {
+        $type: value.$type,
+        $value: value.$value,
+        figmaType: value.$extensions?.["com.figma.type"],
+        path: path + key,
+      };
+      return;
+    }
+
+    flattenAgStudioTokens(value, path + key + ".", acc);
+  });
+
+  return acc;
+};
+
+const flatTokens = isAgStudio
+  ? flattenAgStudioTokens(exampleTokens)
+  : flattenAgGridTokens();
 
 // Recursively resolves token references of the form "{category.tokenName}"
 const resolveValue = (value, depth = 0) => {
@@ -152,13 +211,13 @@ const colorToHex = (colorValue) => {
   return hexLower + alphaHex;
 };
 
-// Converts a raw token value into the shape AG-Grid expects
+// Converts a raw token value into the shape AG Grid expects
 // Handles shadow params (fall back to "none"), color objects (hex strings),
 // and browserColorScheme (lowercase to match CSS color-scheme values)
-const convertValue = (tokenName, type, rawValue) => {
+const convertAgGridValue = (tokenName, type, rawValue) => {
   const resolved = resolveValue(rawValue);
 
-  if (SHADOW_PARAMS.has(tokenName)) {
+  if (AG_GRID_SHADOW_PARAMS.has(tokenName)) {
     if (typeof resolved === "string") return resolved;
     return "none";
   }
@@ -174,6 +233,40 @@ const convertValue = (tokenName, type, rawValue) => {
 
   if (type === "string") {
     if (tokenName === "browserColorScheme") return resolved.toLowerCase();
+    return resolved;
+  }
+
+  return resolved;
+};
+
+// Converts a raw token value into the shape AG Studio expects
+// Shadow params fall back to "none", border params are booleans in the Figma export,
+// colors become hex strings and colour schemes are lowercased to match CSS values
+const convertAgStudioValue = (paramName, token) => {
+  const resolved = resolveValue(token.$value);
+
+  if (paramName.endsWith("Shadow")) {
+    if (typeof resolved === "string") return resolved;
+    return "none";
+  }
+
+  if (token.figmaType === "boolean" && AG_STUDIO_BORDER_PARAMS.has(paramName)) {
+    return Boolean(resolved);
+  }
+
+  if (
+    token.$type === "color" &&
+    typeof resolved === "object" &&
+    resolved !== null &&
+    resolved.hex
+  ) {
+    return colorToHex(resolved);
+  }
+
+  if (token.$type === "string") {
+    if (paramName.toLowerCase().endsWith("browsercolorscheme")) {
+      return resolved.toLowerCase();
+    }
     return resolved;
   }
 
@@ -231,12 +324,12 @@ const formatJSObject = (obj, indent = 2) => {
   return `{\n${formattedEntries.join(",\n")}\n${" ".repeat(indent - 2)}}`;
 };
 
-// Build the final theme object by filtering and resolving valid theme parameters
-const unsortedAgGridTheme = Object.entries(flatTokens).reduce(
-  (themeParams, [tokenName, token]) => {
-    if (isThemeParamName(tokenName)) {
-      const paramName = getThemeParamName(tokenName);
-      themeParams[paramName] = convertValue(
+// Build the final AG Grid theme object by filtering and resolving valid theme parameters
+const buildAgGridTheme = () =>
+  Object.entries(flatTokens).reduce((themeParams, [tokenName, token]) => {
+    if (isAgGridParamName(tokenName)) {
+      const paramName = getAgGridParamName(tokenName);
+      themeParams[paramName] = convertAgGridValue(
         paramName,
         token.$type,
         token.$value,
@@ -244,8 +337,8 @@ const unsortedAgGridTheme = Object.entries(flatTokens).reduce(
     }
 
     // Handle border parameters by combining width and color tokens into border objects
-    if (isBorderWidthParam(tokenName)) {
-      const borderParamName = getBorderParamName(tokenName);
+    if (isAgGridBorderWidthParam(tokenName)) {
+      const borderParamName = getAgGridBorderParamName(tokenName);
       const borderValue = parseBorderValue(borderParamName, flatTokens);
 
       if (borderValue) {
@@ -254,20 +347,52 @@ const unsortedAgGridTheme = Object.entries(flatTokens).reduce(
     }
 
     return themeParams;
-  },
-  {},
-);
+  }, {});
+
+// Build the final AG Studio theme object, skipping tokens that are not theme parameters
+// (the Figma file also holds tokens for parts of AG Grid that AG Studio does not use)
+const buildAgStudioTheme = () => {
+  const unmatchedTokens = [];
+
+  const themeParams = Object.entries(flatTokens).reduce(
+    (params, [tokenName, token]) => {
+      const paramName = getAgStudioParamName(tokenName);
+
+      if (!paramName) {
+        unmatchedTokens.push(token.path);
+        return params;
+      }
+
+      params[paramName] = convertAgStudioValue(paramName, token);
+
+      return params;
+    },
+    {},
+  );
+
+  if (unmatchedTokens.length > 0) {
+    console.warn(
+      `⚠️  ${unmatchedTokens.length} tokens did not match an AG Studio theme parameter and were skipped:\n${unmatchedTokens
+        .map((path) => `   ${path}`)
+        .join("\n")}`,
+    );
+  }
+
+  return themeParams;
+};
+
+const unsortedTheme = isAgStudio ? buildAgStudioTheme() : buildAgGridTheme();
 
 // Sort the theme object alphabetically by key for consistent output
-const agGridTheme = Object.keys(unsortedAgGridTheme)
+const theme = Object.keys(unsortedTheme)
   .sort()
   .reduce((sortedTheme, key) => {
-    sortedTheme[key] = unsortedAgGridTheme[key];
+    sortedTheme[key] = unsortedTheme[key];
     return sortedTheme;
   }, {});
 
-const filepath = `./themes/${themeName}-ag-grid-theme.js`;
-const fileContent = `export const ${themeName}Theme = ${formatJSObject(agGridTheme)};\n`;
+const filepath = `./themes/${themeName}-${PRODUCT}-theme.js`;
+const fileContent = `export const ${themeName}Theme = ${formatJSObject(theme)};\n`;
 
 // Write the formatted theme object to a JavaScript file
 writeFileSync(filepath, fileContent, "utf8");
