@@ -1,8 +1,8 @@
-# AG Grid Figma Design System Local Variables to Theme
+# AG Grid & AG Studio Figma Local Variables to Theme
 
-An example project that transforms design tokens `.json` exported from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) into [AG Grid Theming API](https://www.ag-grid.com/javascript-data-grid/theming-api/) or [AG Studio theme API](https://www.ag-grid.com/studio/react/studio-theme/) theme objects, using the W3C Design Token Community Group (DTCG) format. Each exported JSON file represents a single theme/mode combination (e.g. "Quartz Light", "Alpine Dark").
+An example project that transforms design tokens `.json` exported from the [AG Grid Figma design system](https://www.figma.com/community/file/1360600846643230092) or the [AG Studio Figma design system](https://www.figma.com/community/file/1680264822642310216/ag-studio-design-system) into [AG Grid Theming API](https://www.ag-grid.com/javascript-data-grid/theming-api/) or [AG Studio theme API](https://www.ag-grid.com/studio/react/studio-theme/) theme objects, using the W3C Design Token Community Group (DTCG) format. Each exported JSON file represents a single theme/mode combination (e.g. "Quartz Light", "Alpine Dark").
 
-**Please note**: This project is provided as an example to show how design tokens `.json` can be transformed into valid AG Grid and AG Studio theme objects. We recommend that you either modify this project or create your own to match your own AG Grid Figma assets and development workflow.
+**Please note**: This project is provided as an example to show how design tokens `.json` can be transformed into valid AG Grid and AG Studio theme objects. We recommend that you either modify this project or create your own to match your own Figma assets and development workflow.
 
 ## Prerequisites
 
@@ -14,8 +14,13 @@ An example project that transforms design tokens `.json` exported from the [AG G
 
 The example project expects a tokens `.json` file for a single local variables "mode".
 
-- Open the local variables panel within the AG Grid Figma Design System file.
-- Select the "AG Theme" collection for AG Grid themes, or the AG Studio collection for AG Studio themes.
+Each design system is a separate Figma file, so start by opening the one for the product you are theming:
+
+- **AG Grid themes**: open the [AG Grid Figma Design System](https://www.figma.com/community/file/1360600846643230092) file and select the "AG Theme" collection in the local variables panel.
+- **AG Studio themes**: open the [AG Studio Figma Design System](https://www.figma.com/community/file/1680264822642310216/ag-studio-design-system) file and select the "AG Studio" collection in the local variables panel.
+
+Then, for either product:
+
 - Right-click on the header of the "mode" you wish to export.
 - Click "Export mode" and save the tokens `.json` file to your computer.
 
@@ -42,7 +47,7 @@ node ag-tokens-to-themes.js --tokens ./tokens/studio-dark-tokens.json --product 
 
 The script generates a JavaScript file in the `/themes/` directory. Each file exports a theme object that can be directly used with the AG Grid Theming API or the AG Studio theme API.
 
-The AG Studio Figma collection also contains tokens for parts of AG Grid that AG Studio does not use. These do not map to an AG Studio theme parameter, so they are skipped and listed on the console when converting.
+Not every token in the AG Studio Figma collection maps to a theme parameter in the version of AG Studio this project targets (see `data/agStudioParamNames.js`). Unmatched tokens are skipped and listed on the console when converting.
 
 Example output file: `/themes/quartzLight-ag-grid-theme.js`
 
